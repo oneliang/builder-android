@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT builder (configuration-class,configuration*,handler*,task-node-insert*)>
+<!ELEMENT configuration-class EMPTY>
+<!ATTLIST configuration-class type CDATA #REQUIRED>
+<!ELEMENT configuration EMPTY>
+<!ATTLIST configuration name CDATA #REQUIRED>
+<!ATTLIST configuration value CDATA #REQUIRED>
+<!ATTLIST configuration log (true|false) #IMPLIED>
+<!ELEMENT handler (reference-handler-name*,command*)>
+<!ATTLIST handler name CDATA #REQUIRED>
+<!ATTLIST handler type CDATA #REQUIRED>
+<!ATTLIST handler mode (singleton|more) #IMPLIED>
+<!ATTLIST handler inputKeyValue CDATA #IMPLIED>
+<!ATTLIST handler outputKey CDATA #IMPLIED>
+<!ELEMENT reference-handler-name EMPTY>
+<!ATTLIST reference-handler-name value CDATA #REQUIRED>
+<!ELEMENT command EMPTY>
+<!ATTLIST command value CDATA #REQUIRED>
+<!ELEMENT task-node-insert (parent-name*,child-name*,handler-name)>
+<!ATTLIST task-node-insert name CDATA #REQUIRED>
+<!ATTLIST task-node-insert skip (false|true) #IMPLIED>
+<!ELEMENT parent-name EMPTY>
+<!ELEMENT child-name EMPTY>
+<!ELEMENT handler-name EMPTY>
+<!ATTLIST parent-name value CDATA #REQUIRED>
+<!ATTLIST child-name value CDATA #REQUIRED>
+<!ATTLIST handler-name value CDATA #REQUIRED>

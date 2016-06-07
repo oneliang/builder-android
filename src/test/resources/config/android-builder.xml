@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE builder SYSTEM "builder.dtd">
+<builder>
+    <configuration-class type="com.oneliang.tools.builder.android.base.AndroidConfigurationForEclipse"/>
+    <configuration name="javaSdk" value="/D:/Dandelion/tools/Java/jdk1.7.0_71"/>
+	<!--<configuration name="androidSdk" value="/Users/oneliang/Java/android/android-sdk-macosx"/>-->
+	<configuration name="androidSdk" value="/D:/Dandelion/android/android-sdks"/>
+	<configuration name="projectWorkspace" value="/D:/Dandelion/android/workspace"/>
+	<configuration name="projectMain" value="OnlyOne"/>
+	<configuration name="buildOutput" value="/D:/builder-gen"/>
+	<configuration name="jarKeystore" value="/D:/Dandelion/tencent/key/debug.keystore" log="false"/>
+	<configuration name="jarStorePassword" value="android" log="false"/>
+	<configuration name="jarKeyPassword" value="android" log="false"/>
+	<configuration name="jarKeyAlias" value="androiddebugkey" log="false"/>
+	<configuration name="apkDebug" value="true"/>
+	<configuration name="autoDex" value="true"/>
+	<configuration name="projectTaskNodeInsertName" value="buildAndroidProject"/>
+	<configuration name="androidProjectDexTaskNodeInsertName" value="androidProjectDex"/>
+	<configuration name="multiAndroidProjectDexTaskNodeInsertName" value="multiAndroidProjectDex"/>
+
+	<handler name="clean" type="com.oneliang.tools.builder.android.handler.CleanHandler"/>
+	<handler name="mergeAndroidManifest" type="com.oneliang.tools.builder.android.handler.MergeAndroidManifestHandler"/>
+	<handler name="generatePublicResource" type="com.oneliang.tools.builder.android.handler.GeneratePublicResourceHandler"/>
+	<handler name="generatePublicFile" type="com.oneliang.tools.builder.android.handler.GeneratePublicFileHandler"/>
+	<handler name="generatePublicRFile" type="com.oneliang.tools.builder.android.handler.GeneratePublicRFileHandler"/>
+	<handler name="generatePublicRFileCombined" type="com.oneliang.tools.builder.base.BaseHandler">
+		<reference-handler-name value="generatePublicRFile"/>
+	</handler>
+	<handler name="compilePublicFile" type="com.oneliang.tools.builder.android.handler.CompilePublicFileHandler"/>
+	<handler name="compilePublicRFile" type="com.oneliang.tools.builder.android.handler.CompilePublicRFileHandler"/>
+	<handler name="packageResource" type="com.oneliang.tools.builder.android.handler.PackageResourceHandler"/>
+	<handler name="copySoFile" type="com.oneliang.tools.builder.android.handler.CopySoFileHandler"/>
+	<handler name="beforeCompileAndroidProject" type="com.oneliang.tools.builder.android.handler.BeforeCompileAndroidProjectHandler" mode="more"/>
+	<handler name="generateAndroidProjectAidl" type="com.oneliang.tools.builder.android.handler.GenerateAndroidProjectAidlHandler" mode="more"/>
+	<handler name="compileAndroidProject" type="com.oneliang.tools.builder.android.handler.CompileAndroidProjectHandler" mode="more"/>
+	<handler name="afterCompileAndroidProject" type="com.oneliang.tools.builder.android.handler.AfterCompileAndroidProjectHandler" mode="more"/>
+	<handler name="buildAndroidProject" type="com.oneliang.tools.builder.android.handler.AndroidProjectHandler" mode="more">
+		<reference-handler-name value="beforeCompileAndroidProject"/>
+		<reference-handler-name value="generateAndroidProjectAidl"/>
+		<reference-handler-name value="compileAndroidProject"/>
+		<reference-handler-name value="afterCompileAndroidProject"/>
+	</handler>
+	<handler name="proguard" type="com.oneliang.tools.builder.android.handler.ProguardHandler"/>
+	<handler name="estimateLinearAlloc" type="com.oneliang.tools.builder.android.handler.EstimateLinearAllocHandler"/>
+	<handler name="mergeAllAndroidProjectJar" type="com.oneliang.tools.builder.android.handler.MergeAllAndroidProjectJarHandler"/>
+	<handler name="androidProjectDex" type="com.oneliang.tools.builder.android.handler.AndroidProjectDexHandler" mode="more"/>
+	<handler name="mergeDex" type="com.oneliang.tools.builder.android.handler.MergeDexHandler" mode="more"/>
+	<handler name="afterMergeDex" type="com.oneliang.tools.builder.android.handler.AfterMergeDexHandler" mode="more"/>
+	<handler name="multiAndroidProjectDex" type="com.oneliang.tools.builder.android.handler.MultiAndroidProjectDexHandler" mode="more">
+		<reference-handler-name value="mergeDex"/>
+		<reference-handler-name value="afterMergeDex"/>
+	</handler>
+	<handler name="autoDex" type="com.oneliang.tools.builder.android.handler.AutoDexHandler"/>
+	<handler name="generateApk" type="com.oneliang.tools.builder.android.handler.GenerateApkHandler"/>
+	<handler name="signApk" type="com.oneliang.tools.builder.android.handler.SignApkHandler"/>
+	<handler name="zipAlignApk" type="com.oneliang.tools.builder.android.handler.ZipAlignApkHandler"/>
+	<handler name="installApk" type="com.oneliang.tools.builder.android.handler.InstallApkHandler"/>
+	<handler name="generateApkPatch" type="com.oneliang.tools.builder.android.handler.GenerateApkPatchHandler"/>
+
+	<task-node-insert name="clean">
+		<handler-name value="clean"/>
+	</task-node-insert>
+	<task-node-insert name="mergeAndroidManifest">
+	    <!-- <parent-name value="clean"/> -->
+		<handler-name value="mergeAndroidManifest"/>
+	</task-node-insert>
+	<task-node-insert name="generatePublicFile">
+	    <!-- <parent-name value="clean"/> -->
+		<handler-name value="generatePublicFile"/>
+	</task-node-insert>
+	<task-node-insert name="generatePublicResource">
+		<!-- <parent-name value="clean"/> -->
+		<handler-name value="generatePublicResource"/>
+	</task-node-insert>
+	<task-node-insert name="generatePublicRFileCombined">
+	    <parent-name value="generatePublicResource"/>
+	    <parent-name value="mergeAndroidManifest"/>
+		<handler-name value="generatePublicRFileCombined"/>
+	</task-node-insert>
+	<task-node-insert name="copySoFile">
+	    <!-- <parent-name value="clean"/> -->
+		<handler-name value="copySoFile"/>
+	</task-node-insert>
+	<task-node-insert name="packageResource">
+	    <parent-name value="mergeAndroidManifest"/>
+	    <parent-name value="generatePublicResource"/>
+		<handler-name value="packageResource"/>
+	</task-node-insert>
+	<task-node-insert name="compilePublicFile">
+	    <parent-name value="generatePublicFile"/>
+		<handler-name value="compilePublicFile"/>
+	</task-node-insert>
+	<task-node-insert name="compilePublicRFile">
+	    <parent-name value="generatePublicRFileCombined"/>
+		<handler-name value="compilePublicRFile"/>
+	</task-node-insert>
+	<task-node-insert name="buildAndroidProject">
+	    <parent-name value="compilePublicRFile"/>
+	    <parent-name value="compilePublicFile"/>
+		<handler-name value="buildAndroidProject"/>
+	</task-node-insert>
+	<task-node-insert name="proguard">
+	    <parent-name value="buildAndroidProject"/>
+		<handler-name value="proguard"/>
+	</task-node-insert>
+	<task-node-insert name="mergeAllAndroidProjectJar">
+	    <parent-name value="proguard"/>
+		<handler-name value="mergeAllAndroidProjectJar"/>
+	</task-node-insert>
+	<task-node-insert name="estimateLinearAlloc">
+	    <parent-name value="mergeAllAndroidProjectJar"/>
+		<handler-name value="estimateLinearAlloc"/>
+	</task-node-insert>
+	<task-node-insert name="androidProjectDex">
+	    <parent-name value="estimateLinearAlloc"/>
+		<handler-name value="androidProjectDex"/>
+	</task-node-insert>
+	<task-node-insert name="multiAndroidProjectDex">
+	    <parent-name value="androidProjectDex"/>
+		<handler-name value="multiAndroidProjectDex"/>
+	</task-node-insert>
+	<!-- 
+	<task-node-insert name="autoDex">
+	    <parent-name value="mergeAllAndroidProjectJar"/>
+		<handler-name value="autoDex"/>
+	</task-node-insert>
+	-->
+	<task-node-insert name="generateApk">
+		<parent-name value="packageResource"/>
+	    <parent-name value="multiAndroidProjectDex"/>
+	    <parent-name value="copySoFile"/>
+	    <!-- <parent-name value="autoDex"/> -->
+		<handler-name value="generateApk"/>
+	</task-node-insert>
+	<task-node-insert name="generateApkPatch">
+		<parent-name value="packageResource"/>
+	    <parent-name value="multiAndroidProjectDex"/>
+	    <parent-name value="copySoFile"/>
+		<handler-name value="generateApkPatch"/>
+	</task-node-insert>
+	<task-node-insert name="signApk">
+		<parent-name value="generateApk"/>
+		<handler-name value="signApk"/>
+	</task-node-insert>
+	<task-node-insert name="zipAlignApk">
+		<parent-name value="signApk"/>
+		<handler-name value="zipAlignApk"/>
+	</task-node-insert>
+	<task-node-insert name="installApk">
+		<parent-name value="zipAlignApk"/>
+		<handler-name value="installApk"/>
+	</task-node-insert>
+</builder>
