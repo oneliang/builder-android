@@ -173,21 +173,28 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 
 	protected void initializeAllProject(){
 		super.initializeAllProject();
-		for(Project project:this.projectList){
+		//initialize main android project
+		Project mainProject=this.projectMap.get(this.projectMain);
+		if(mainProject!=null&&mainProject instanceof Project){
+			this.mainAndroidProject=(AndroidProject)mainProject;
+		}
+		//add project to android project list,reset project list and project map
+		this.projectList.clear();
+		this.projectMap.clear();
+		List<Project> mainProjectParentProjectList=this.mainAndroidProject.getParentProjectList();
+		this.addProject(mainProject);
+		this.androidProjectList.add(this.mainAndroidProject);
+		for(Project project:mainProjectParentProjectList){
 			AndroidProject androidProject=null;
 			if(!(project instanceof AndroidProject)){
 				continue;
 			}
 			androidProject=(AndroidProject)project;
 			this.androidProjectList.add(androidProject);
+			this.addProject(androidProject);
 //			if(!this.androidProjectMap.containsKey(androidProject.getName())){
 //				this.androidProjectMap.put(androidProject.getName(),androidProject);
 //			}
-		}
-		//initialize main android project
-		Project mainProject=this.projectMap.get(this.projectMain);
-		if(mainProject!=null&&mainProject instanceof Project){
-			this.mainAndroidProject=(AndroidProject)mainProject;
 		}
 		String compileTarget=this.mainAndroidProject.getCompileTarget();
 		this.mainAndroidApiJar=this.android.findAndroidApiJar(compileTarget);
@@ -197,7 +204,6 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 		this.patchAndroidProject=new PatchAndroidProject(this.mainAndroidProject.getOutputHome(),this.apkDebug);
 		//all android project,find parent android project list of android project and find all package name
 		for(AndroidProject androidProject:this.androidProjectList){
-			androidProject.setParentProjectList(this.findParentProjectList(androidProject));
 			List<String> compileClasspathList=this.getAndroidProjectCompileClasspathList(androidProject);
 			androidProject.setCompileClasspathList(compileClasspathList);
 			List<String> compileSourceDirectoryList=this.getAndroidProjectCompileSourceDirectoryList(androidProject);
