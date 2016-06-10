@@ -36,7 +36,7 @@ public class ProguardHandler extends AbstractAndroidHandler {
 			}
 
 			FileUtil.createDirectory(this.androidConfiguration.getMainAndroidProject().getOptimizedProguardOutput());
-			AndroidProject mainAndroidProject=this.androidConfiguration.getAndroidProjectMap().get(this.androidConfiguration.getProjectMain());
+			AndroidProject mainAndroidProject=this.androidConfiguration.getMainAndroidProject();
 			List<ProguardJarPair> proguardJarPairList=new ArrayList<ProguardJarPair>();
 			//public
 			String inputPublicJar=this.androidConfiguration.getPublicAndroidProject().getOptimizedOriginalOutput()+"/"+PublicAndroidProject.PUBLIC+Constant.Symbol.DOT+Constant.File.JAR;

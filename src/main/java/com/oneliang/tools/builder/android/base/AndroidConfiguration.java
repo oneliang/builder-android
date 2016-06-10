@@ -7,10 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.xml.xpath.XPath;
@@ -91,7 +89,7 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 	
 	protected Android android=null;
 	protected final List<AndroidProject> androidProjectList=new CopyOnWriteArrayList<AndroidProject>();
-	protected final Map<String, AndroidProject> androidProjectMap=new ConcurrentHashMap<String, AndroidProject>();
+//	protected final Map<String, AndroidProject> androidProjectMap=new ConcurrentHashMap<String, AndroidProject>();
 	protected Map<String,Integer> androidProjectDexIdMap=new ConcurrentHashMap<String,Integer>();
 
 	protected PublicAndroidProject publicAndroidProject=null;
@@ -103,7 +101,6 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 	protected List<String> autoDexMainDexOtherClassList=new CopyOnWriteArrayList<String>();
 	protected Map<String,String> packageNameAndroidManifestMap=new ConcurrentHashMap<String,String>();
 
-	private Map<TaskNodeInsertBean,AndroidProject> taskNodeInsertBeanAndroidProjectMap=new HashMap<TaskNodeInsertBean,AndroidProject>();
 	private Map<TaskNodeInsertBean,Entry<Integer,List<AndroidProject>>> taskNodeInsertBeanDexEntryMap=new HashMap<TaskNodeInsertBean,Entry<Integer,List<AndroidProject>>>();
 	//temporary
 	private boolean allResourceFileHasCache=false;
@@ -183,12 +180,15 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 			}
 			androidProject=(AndroidProject)project;
 			this.androidProjectList.add(androidProject);
-			if(!this.androidProjectMap.containsKey(androidProject.getName())){
-				this.androidProjectMap.put(androidProject.getName(),androidProject);
-			}
+//			if(!this.androidProjectMap.containsKey(androidProject.getName())){
+//				this.androidProjectMap.put(androidProject.getName(),androidProject);
+//			}
 		}
 		//initialize main android project
-		this.mainAndroidProject=this.androidProjectMap.get(this.projectMain);
+		Project mainProject=this.projectMap.get(this.projectMain);
+		if(mainProject!=null&&mainProject instanceof Project){
+			this.mainAndroidProject=(AndroidProject)mainProject;
+		}
 		String compileTarget=this.mainAndroidProject.getCompileTarget();
 		this.mainAndroidApiJar=this.android.findAndroidApiJar(compileTarget);
 		this.parseMainAndroidProjectAndroidManifest();
@@ -197,7 +197,7 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 		this.patchAndroidProject=new PatchAndroidProject(this.mainAndroidProject.getOutputHome(),this.apkDebug);
 		//all android project,find parent android project list of android project and find all package name
 		for(AndroidProject androidProject:this.androidProjectList){
-			androidProject.setParentAndroidProjectList(this.findParentAndroidProjectList(androidProject));
+			androidProject.setParentProjectList(this.findParentProjectList(androidProject));
 			List<String> compileClasspathList=this.getAndroidProjectCompileClasspathList(androidProject);
 			androidProject.setCompileClasspathList(compileClasspathList);
 			List<String> compileSourceDirectoryList=this.getAndroidProjectCompileSourceDirectoryList(androidProject);
@@ -227,8 +227,7 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 	 * increase task node insert bean list
 	 */
 	protected List<TaskNodeInsertBean> increaseTaskNodeInsertBeanList() {
-		super.increaseTaskNodeInsertBeanList();
-		List<TaskNodeInsertBean> taskNodeInsertBeanList=new ArrayList<TaskNodeInsertBean>();
+		List<TaskNodeInsertBean> taskNodeInsertBeanList=super.increaseTaskNodeInsertBeanList();
 		//android project task node insert name
 		TaskNodeInsertBean androidProjectTaskNodeInsertBean=this.builderConfiguration.getTaskNodeInsertBeanMap().get(this.projectTaskNodeInsertName);
 		androidProjectTaskNodeInsertBean.setSkip(true);
@@ -241,40 +240,17 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 			multiDexParentTaskNodeInsertBean.setSkip(true);
 		}
 		List<String> dexTaskNodeNameList=new ArrayList<String>();
-		for(AndroidProject androidProject:this.androidProjectList){
-			//compile task node insert
-			String name=androidProject.getName();
-			String[] parentNames=androidProject.getDependProjects();
-			if(parentNames==null||parentNames.length==0){
-				parentNames=androidProjectTaskNodeInsertBean.getParentNames();
-			}
-			TaskNodeInsertBean taskNodeInsertBean=new TaskNodeInsertBean();
-			taskNodeInsertBean.setName(name);
-			taskNodeInsertBean.setParentNames(parentNames);
-			taskNodeInsertBean.setHandlerName(androidProjectTaskNodeInsertBean.getHandlerName());
-			taskNodeInsertBeanList.add(taskNodeInsertBean);
-			this.taskNodeInsertBeanAndroidProjectMap.put(taskNodeInsertBean, androidProject);
-			
-			if(name.equals(this.projectMain)){
-				List<TaskNodeInsertBean> childTaskNodeInsertBeanList=this.builderConfiguration.getChildTaskNodeInsertBeanMap().get(this.projectTaskNodeInsertName);
-				if(childTaskNodeInsertBeanList!=null){
-					for(TaskNodeInsertBean childTaskNodeInsertBean:childTaskNodeInsertBeanList){
-						Set<String> parentNameSet=this.filterTaskNodeParentNames(childTaskNodeInsertBean.getParentNames(), this.projectTaskNodeInsertName);
-						parentNameSet.add(name);
-						childTaskNodeInsertBean.setParentNames(parentNameSet.toArray(new String[]{}));
-					}
-				}
-			}
+		for(Project project:this.projectList){
 			if(androidProjectDexParentTaskNodeInsertBean!=null){
 				//dex task node insert
-				String dexTaskNodeName="dex_"+androidProject.getName();
+				String dexTaskNodeName="dex_"+project.getName();
 				String[] dexParentNames=androidProjectDexParentTaskNodeInsertBean.getParentNames();
 				TaskNodeInsertBean dexTaskNodeInsertBean=new TaskNodeInsertBean();
 				dexTaskNodeInsertBean.setName(dexTaskNodeName);
 				dexTaskNodeInsertBean.setParentNames(dexParentNames);
 				dexTaskNodeInsertBean.setHandlerName(androidProjectDexParentTaskNodeInsertBean.getHandlerName());
 				taskNodeInsertBeanList.add(dexTaskNodeInsertBean);
-				this.taskNodeInsertBeanAndroidProjectMap.put(dexTaskNodeInsertBean, androidProject);
+				this.taskNodeInsertBeanProjectMap.put(dexTaskNodeInsertBean, project);
 				dexTaskNodeNameList.add(dexTaskNodeName);
 			}
 		}
@@ -336,7 +312,11 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 		Handler handler=taskNodeInsertBean.getHandlerInstance();
 		if(handler instanceof AndroidProjectHandler){
 			AndroidProjectHandler androidProjectHandler=(AndroidProjectHandler)handler;
-			androidProjectHandler.setAndroidProject(this.taskNodeInsertBeanAndroidProjectMap.get(taskNodeInsertBean));
+			Project project=this.taskNodeInsertBeanProjectMap.get(taskNodeInsertBean);
+			if(project!=null&&project instanceof AndroidProject){
+				AndroidProject androidProject=(AndroidProject)project;
+				androidProjectHandler.setAndroidProject(androidProject);
+			}
 		}else if(handler instanceof MultiAndroidProjectDexHandler){
 			MultiAndroidProjectDexHandler multiAndroidProjectDexHandler=(MultiAndroidProjectDexHandler)handler;
 			Entry<Integer,List<AndroidProject>> entry=this.taskNodeInsertBeanDexEntryMap.get(taskNodeInsertBean);
@@ -534,12 +514,6 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 		return androidProjectList;
 	}
 	/**
-	 * @return the androidProjectMap
-	 */
-	public Map<String, AndroidProject> getAndroidProjectMap() {
-		return androidProjectMap;
-	}
-	/**
 	 * get public android project
 	 * @return PublicAndroidProject
 	 */
@@ -681,31 +655,6 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 	}
 
 	/**
-	 * find parent android project list
-	 * @param androidProject
-	 * @return List<AndroidProject>
-	 */
-	public List<AndroidProject> findParentAndroidProjectList(AndroidProject androidProject){
-		List<AndroidProject> androidPojectList=new ArrayList<AndroidProject>();
-		Queue<AndroidProject> queue=new ConcurrentLinkedQueue<AndroidProject>();
-		queue.add(androidProject);
-		while(!queue.isEmpty()){
-			AndroidProject project=queue.poll();
-			String[] dependProjects=project.getDependProjects();
-			if(dependProjects!=null){
-				for(String dependProject:dependProjects){
-					AndroidProject parentAndroidProject=this.androidProjectMap.get(dependProject);
-					if(!androidPojectList.contains(parentAndroidProject)){
-						androidPojectList.add(parentAndroidProject);
-						queue.add(parentAndroidProject);
-					}
-				}
-			}
-		}
-		return androidPojectList;
-	}
-
-	/**
 	 * get main android project package name from android manifest
 	 * @return String
 	 */
@@ -754,20 +703,7 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 	 * @return List<String>
 	 */
 	private List<String> getAndroidProjectCompileClasspathList(AndroidProject androidProject){
-		List<String> classpathList=new ArrayList<String>();
-		List<AndroidProject> parentAndSelfAndroidProjectList=new ArrayList<AndroidProject>();
-		parentAndSelfAndroidProjectList.add(androidProject);
-		parentAndSelfAndroidProjectList.addAll(androidProject.getParentAndroidProjectList());
-		for(AndroidProject parentAndSelfAndroidProject:parentAndSelfAndroidProjectList){
-			classpathList.addAll(parentAndSelfAndroidProject.getDependJarList());
-			if(!androidProject.getName().equals(parentAndSelfAndroidProject.getName())){
-				classpathList.add(parentAndSelfAndroidProject.getClassesOutput());
-			}else{
-				if(!this.isNeedToClean()){
-					classpathList.add(parentAndSelfAndroidProject.getClassesOutput());
-				}
-			}
-		}
+		List<String> classpathList=this.getProjectCompileClasspathList(androidProject);
 		classpathList.add(this.android.getAnnotationJar());
 
 		String publicClassesOutput=this.publicAndroidProject.getClassesOutput();

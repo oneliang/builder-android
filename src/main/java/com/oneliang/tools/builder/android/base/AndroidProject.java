@@ -91,7 +91,6 @@ public class AndroidProject extends JavaProject{
 	
 	//use in building
 	private boolean allCompileFileHasCache=false;
-	private List<AndroidProject> parentAndroidProjectList=null;
 	private List<String> compileSourceDirectoryList=null;
 	private Map<RType,Set<RDotTxtEntry>> rTypeResourceMap=null;
 	private List<String> thisTimeClassFileList=null;
@@ -347,7 +346,7 @@ public class AndroidProject extends JavaProject{
 	/**
 	 * @param packageName the packageName to set
 	 */
-	void setPackageName(String packageName) {
+	public void setPackageName(String packageName) {
 		this.packageName = packageName;
 	}
 
@@ -433,20 +432,6 @@ public class AndroidProject extends JavaProject{
 	 */
 	public String getPrepareLibOutput() {
 		return prepareLibOutput;
-	}
-
-	/**
-	 * @return the parentAndroidProjectList
-	 */
-	public List<AndroidProject> getParentAndroidProjectList() {
-		return parentAndroidProjectList;
-	}
-
-	/**
-	 * @param parentAndroidProjectList the parentAndroidProjectList to set
-	 */
-	public void setParentAndroidProjectList(List<AndroidProject> parentAndroidProjectList) {
-		this.parentAndroidProjectList = parentAndroidProjectList;
 	}
 
 	/**
