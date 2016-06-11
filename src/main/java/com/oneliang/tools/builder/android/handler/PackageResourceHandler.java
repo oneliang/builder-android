@@ -10,6 +10,7 @@ import com.oneliang.Constant;
 import com.oneliang.tools.builder.android.base.AndroidProject;
 import com.oneliang.tools.builder.android.base.AndroidProject.DirectoryType;
 import com.oneliang.tools.builder.base.BuilderUtil;
+import com.oneliang.tools.builder.base.ChangedFile;
 import com.oneliang.util.file.FileUtil;
 
 public class PackageResourceHandler extends AbstractAndroidHandler {

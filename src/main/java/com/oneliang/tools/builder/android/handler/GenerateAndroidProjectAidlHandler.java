@@ -5,6 +5,7 @@ import java.util.List;
 import com.oneliang.Constant;
 import com.oneliang.tools.builder.base.BuildException;
 import com.oneliang.tools.builder.base.BuilderUtil;
+import com.oneliang.tools.builder.base.ChangedFile;
 
 public class GenerateAndroidProjectAidlHandler extends AndroidProjectHandler {
 

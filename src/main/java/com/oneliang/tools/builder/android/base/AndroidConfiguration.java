@@ -179,19 +179,13 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 			this.mainAndroidProject=(AndroidProject)mainProject;
 		}
 		//add project to android project list,reset project list and project map
-		this.projectList.clear();
-		this.projectMap.clear();
-		List<Project> mainProjectParentProjectList=this.mainAndroidProject.getParentProjectList();
-		this.addProject(mainProject);
-		this.androidProjectList.add(this.mainAndroidProject);
-		for(Project project:mainProjectParentProjectList){
+		for(Project project:this.projectList){
 			AndroidProject androidProject=null;
 			if(!(project instanceof AndroidProject)){
 				continue;
 			}
 			androidProject=(AndroidProject)project;
 			this.androidProjectList.add(androidProject);
-			this.addProject(androidProject);
 //			if(!this.androidProjectMap.containsKey(androidProject.getName())){
 //				this.androidProjectMap.put(androidProject.getName(),androidProject);
 //			}

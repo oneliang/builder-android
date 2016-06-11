@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Queue;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.w3c.dom.Document;
@@ -17,24 +17,22 @@ import org.w3c.dom.NodeList;
 
 import com.oneliang.Constant;
 import com.oneliang.tools.builder.base.BuildException;
-import com.oneliang.tools.builder.base.Configuration;
 import com.oneliang.tools.builder.base.Project;
 import com.oneliang.util.common.JavaXmlUtil;
 import com.oneliang.util.common.StringUtil;
 import com.oneliang.util.file.FileUtil;
 
-public class AndroidConfigurationForEclipse extends AndroidConfiguration implements Configuration.IDEInitializer,Configuration.ProjectInitializer{
+public class AndroidConfigurationForEclipse extends AndroidConfiguration{
 
 	protected static final String CLASSPATH=".classpath";
 	protected static final String PROJECT_PROPERTIES="project.properties";
 
-	protected void initialize() {
-		super.initialize();
-		this.ideInitializer=this;
-		this.projectInitializer=this;
+	protected void initializeAllProject() {
+		initializeAllProjectFromEclipse();
+		super.initializeAllProject();
 	}
 
-	public void initializeAllProjectFromIDE() {
+	private void initializeAllProjectFromEclipse() {
 		AndroidProject mainAndroidProject=new AndroidProject(this.getProjectWorkspace(),this.getProjectMain());
 		if(this.buildOutputEclipse){
 			mainAndroidProject.setBuildType(AndroidProject.BUILD_TYPE_ECLIPSE);
@@ -92,15 +90,11 @@ public class AndroidConfigurationForEclipse extends AndroidConfiguration impleme
 							androidProject.setCompileTarget(value);
 						}
 					}else{
-						if(this.ideInitializer!=null){
-							this.ideInitializer.parsingProjectProperties(androidProject, key, value);
-						}
+						this.parsingProjectProperties(androidProject, key, value);
 					}
 				}
 				androidProject.setDependProjects(dependProjectList.toArray(new String[]{}));
-				if(this.projectInitializer!=null){
-					this.projectInitializer.readProjectOtherProperties(androidProject);
-				}
+				this.readProjectOtherProperties(androidProject);
 				//read classpath
 				String classpath=androidProject.getHome()+Constant.Symbol.SLASH_LEFT+CLASSPATH;
 				List<String> sourceDirectoryList=new ArrayList<String>();
@@ -123,10 +117,8 @@ public class AndroidConfigurationForEclipse extends AndroidConfiguration impleme
 									Node pathNode=namedNodeMap.getNamedItem("path");
 									if(pathNode!=null){
 										String sourceDirectory=pathNode.getNodeValue();
-										if(this.ideInitializer!=null){
-											if(this.ideInitializer.isSourceDirectory(androidProject, sourceDirectory)){
-												sourceDirectoryList.add(sourceDirectory);
-											}
+										if(this.isSourceDirectory(androidProject, sourceDirectory)){
+											sourceDirectoryList.add(sourceDirectory);
 										}
 									}
 									
@@ -148,7 +140,7 @@ public class AndroidConfigurationForEclipse extends AndroidConfiguration impleme
 	 * @param sourceDirectory
 	 * @return boolean
 	 */
-	public boolean isSourceDirectory(Project project, String sourceDirectory) {
+	private boolean isSourceDirectory(Project project, String sourceDirectory) {
 		boolean result=false;
 		if(sourceDirectory!=null&&(!sourceDirectory.equals("gen"))){
 			result=true;
@@ -156,7 +148,7 @@ public class AndroidConfigurationForEclipse extends AndroidConfiguration impleme
 		return result;
 	}
 
-	public void parsingProjectProperties(Project project, String key, String value) {
+	private void parsingProjectProperties(Project project, String key, String value) {
 		if(project!=null&&project instanceof AndroidProject){
 			AndroidProject androidProject=(AndroidProject)project;
 			if(key.equals("only.compile.classpath")&&StringUtil.isNotBlank(value)){
@@ -180,6 +172,6 @@ public class AndroidConfigurationForEclipse extends AndroidConfiguration impleme
 		}
 	}
 
-	public void readProjectOtherProperties(Project project) {
+	private void readProjectOtherProperties(Project project) {
 	}
 }

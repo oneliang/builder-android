@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import com.oneliang.tools.builder.android.base.AndroidProject;
 import com.oneliang.tools.builder.base.BuilderUtil;
+import com.oneliang.tools.builder.base.ChangedFile;
 import com.oneliang.util.file.FileUtil;
 
 public class GeneratePublicRFileHandler extends AbstractAndroidHandler {

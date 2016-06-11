@@ -6,6 +6,7 @@ import java.util.List;
 import com.oneliang.Constant;
 import com.oneliang.tools.builder.android.base.PublicAndroidProject;
 import com.oneliang.tools.builder.base.BuilderUtil;
+import com.oneliang.tools.builder.base.ChangedFile;
 import com.oneliang.util.file.FileUtil;
 
 public class CompilePublicRFileHandler extends AbstractAndroidHandler {
