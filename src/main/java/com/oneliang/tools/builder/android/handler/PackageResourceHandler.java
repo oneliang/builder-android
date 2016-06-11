@@ -21,9 +21,9 @@ public class PackageResourceHandler extends AbstractAndroidHandler {
 		CacheOption cacheOption=new CacheOption(assetsFileCacheFullFilename, assetsDirectoryList);
 		cacheOption.changedFileProcessor=new ChangedFileProcessor() {
 			public boolean process(Iterable<ChangedFile> changedFileIterable) {
+				String prepareOutput=androidConfiguration.getMainAndroidProject().getPrepareAssetsOutput();
+				FileUtil.createDirectory(prepareOutput);
 				if(changedFileIterable!=null&&changedFileIterable.iterator().hasNext()){
-					String prepareOutput=androidConfiguration.getMainAndroidProject().getPrepareAssetsOutput();
-					FileUtil.createDirectory(prepareOutput);
 					Iterator<ChangedFile> changedFileIterator=changedFileIterable.iterator();
 					while(changedFileIterator.hasNext()){
 						ChangedFile changedFile=changedFileIterator.next();

@@ -17,7 +17,7 @@ public class CompileAndroidProjectHandler extends AndroidProjectHandler {
 
 	public boolean handle() {
 		boolean allCompileFileHasCache=false;
-		final List<String> sourceFileDirectoryList=androidProject.getCompileSourceDirectoryList();
+		final List<String> sourceFileDirectoryList=androidProject.getSourceDirectoryList();
 		String sourceFileCacheFullFilename=androidProject.getCacheOutput()+Constant.Symbol.SLASH_LEFT+CACHE_JAVA_FILE;
 		CacheOption cacheOption=new CacheOption(sourceFileCacheFullFilename, sourceFileDirectoryList);
 		cacheOption.fileSuffix=Constant.Symbol.DOT+Constant.File.JAVA;

@@ -20,24 +20,28 @@ public class EstimateLinearAllocHandler extends AbstractAndroidHandler {
 				List<String> androidProjectJarList=this.getAndroidProjectJarListWithProguard(androidProject);
 				if(androidProjectJarList!=null&&!androidProjectJarList.isEmpty()){
 					AllocStat androidProjectAllocStat=new AllocStat();
+					androidProjectAllocStat.setFieldReferenceMap(new HashMap<String,String>());
 					androidProjectAllocStat.setMethodReferenceMap(new HashMap<String,String>());
 					for(String androidProjectJar:androidProjectJarList){
 						AllocStat allocStat=LinearAllocUtil.estimateJar(androidProjectJar);
 						androidProjectAllocStat.setTotalAlloc(androidProjectAllocStat.getTotalAlloc()+allocStat.getTotalAlloc());
+						androidProjectAllocStat.getFieldReferenceMap().putAll(allocStat.getFieldReferenceMap());
 						androidProjectAllocStat.getMethodReferenceMap().putAll(allocStat.getMethodReferenceMap());
-						System.out.println("\t"+androidProjectJar+"\t"+allocStat.getTotalAlloc()+"\t"+allocStat.getMethodReferenceMap().size());
+						System.out.println("\t"+androidProjectJar+"\t"+allocStat.getTotalAlloc()+"\t"+allocStat.getFieldReferenceMap().size()+"\t"+allocStat.getMethodReferenceMap().size());
 					}
-					System.out.println("\t"+androidProject.getName()+"\t"+androidProjectAllocStat.getTotalAlloc()+"\t"+androidProjectAllocStat.getMethodReferenceMap().size());
+					System.out.println("\t"+androidProject.getName()+"\t"+androidProjectAllocStat.getTotalAlloc()+"\t"+androidProjectAllocStat.getFieldReferenceMap().size()+"\t"+androidProjectAllocStat.getMethodReferenceMap().size());
 					int dexId=androidProject.getDexId();
 					AllocStat dexAllocStat=null;
 					if(!dexAllocStatMap.containsKey(dexId)){
 						dexAllocStat=new AllocStat();
+						dexAllocStat.setFieldReferenceMap(new HashMap<String,String>());
 						dexAllocStat.setMethodReferenceMap(new HashMap<String,String>());
 						dexAllocStatMap.put(dexId, dexAllocStat);
 					}else{
 						dexAllocStat=dexAllocStatMap.get(dexId);
 					}
 					dexAllocStat.setTotalAlloc(dexAllocStat.getTotalAlloc()+androidProjectAllocStat.getTotalAlloc());
+					dexAllocStat.getFieldReferenceMap().putAll(androidProjectAllocStat.getFieldReferenceMap());
 					dexAllocStat.getMethodReferenceMap().putAll(androidProjectAllocStat.getMethodReferenceMap());
 				}
 			}

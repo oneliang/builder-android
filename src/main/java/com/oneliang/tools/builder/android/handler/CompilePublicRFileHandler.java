@@ -12,6 +12,9 @@ import com.oneliang.util.file.FileUtil;
 public class CompilePublicRFileHandler extends AbstractAndroidHandler {
 
 	public boolean handle() {
+		if(!this.androidConfiguration.isAaptGenerateRFile()){
+			return true;
+		}
 		FileUtil.MatchOption matchOption=new FileUtil.MatchOption(this.androidConfiguration.getPublicRAndroidProject().getGenOutput());
 		matchOption.fileSuffix=Constant.Symbol.DOT+Constant.File.JAVA;
 		List<String> sourceList=FileUtil.findMatchFile(matchOption);

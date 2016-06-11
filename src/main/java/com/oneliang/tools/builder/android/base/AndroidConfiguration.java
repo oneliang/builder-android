@@ -200,8 +200,7 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 		for(AndroidProject androidProject:this.androidProjectList){
 			List<String> compileClasspathList=this.getAndroidProjectCompileClasspathList(androidProject);
 			androidProject.setCompileClasspathList(compileClasspathList);
-			List<String> compileSourceDirectoryList=this.getAndroidProjectCompileSourceDirectoryList(androidProject);
-			androidProject.setCompileSourceDirectoryList(compileSourceDirectoryList);
+			this.resetAndroidProjectSourceDirectoryList(androidProject);
 			logger.info(androidProject);
 			
 			String packageName=androidProject.getPackageName();
@@ -726,21 +725,13 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 	}
 
 	/**
-	 * get android project compile source directory list
+	 * reset android project source directory list
 	 * @param androidProject
 	 * @return List<String>
 	 */
-	private List<String> getAndroidProjectCompileSourceDirectoryList(AndroidProject androidProject){
-		List<String> sourceList=new ArrayList<String>();
-		List<String> sourceDirectoryList=androidProject.getSourceDirectoryList();//getSources();
-		if(sourceDirectoryList!=null){
-			for(String sourceDirectory:sourceDirectoryList){
-//				projectSource=androidProject.getHome()+"/"+projectSource;
-				sourceList.add(sourceDirectory);
-			}
-		}
-		sourceList.add(androidProject.getGenOutput());
-		return sourceList;
+	private void resetAndroidProjectSourceDirectoryList(AndroidProject androidProject){
+		List<String> sourceDirectoryList=androidProject.getSourceDirectoryList();
+		sourceDirectoryList.add(androidProject.getGenOutput());
 	}
 
 	/**

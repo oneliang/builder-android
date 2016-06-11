@@ -17,6 +17,9 @@ public class GeneratePublicRFileHandler extends AbstractAndroidHandler {
 	private boolean generateSuccess=false;
 
 	public boolean handle() {
+		if(!this.androidConfiguration.isAaptGenerateRFile()){
+			return true;
+		}
 		final String destinationDirectory=this.androidConfiguration.getPublicRAndroidProject().getGenOutput();
 		FileUtil.createDirectory(destinationDirectory);
 		final Map<String,String> packageNameAndroidManifestMap=this.androidConfiguration.getPackageNameAndroidManifestMap();

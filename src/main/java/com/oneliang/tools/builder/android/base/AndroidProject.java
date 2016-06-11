@@ -91,7 +91,6 @@ public class AndroidProject extends JavaProject{
 	
 	//use in building
 	private boolean allCompileFileHasCache=false;
-	private List<String> compileSourceDirectoryList=null;
 	private Map<RType,Set<RDotTxtEntry>> rTypeResourceMap=null;
 	private List<String> thisTimeClassFileList=null;
 
@@ -444,22 +443,8 @@ public class AndroidProject extends JavaProject{
 	/**
 	 * @param rTypeResourceMap the rTypeResourceMap to set
 	 */
-	void setRTypeResourceMap(Map<RType, Set<RDotTxtEntry>> rTypeResourceMap) {
+	public void setRTypeResourceMap(Map<RType, Set<RDotTxtEntry>> rTypeResourceMap) {
 		this.rTypeResourceMap = rTypeResourceMap;
-	}
-
-	/**
-	 * @return the compileSourceDirectoryList
-	 */
-	public List<String> getCompileSourceDirectoryList() {
-		return compileSourceDirectoryList;
-	}
-
-	/**
-	 * @param compileSourceDirectoryList the compileSourceDirectoryList to set
-	 */
-	public void setCompileSourceDirectoryList(List<String> compileSourceDirectoryList) {
-		this.compileSourceDirectoryList = compileSourceDirectoryList;
 	}
 
 	/**
