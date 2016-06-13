@@ -83,8 +83,8 @@ public class CompileAndroidProjectHandler extends AndroidProjectHandler {
 		cacheOption=new CacheOption(jarFileCacheFullFilename,this.androidProject.getLibsDirectoryList());
 		cacheOption.fileSuffix=Constant.Symbol.DOT+Constant.File.JAR;
 		Cache jarFileCache=this.dealWithCache(cacheOption);
-		if((javaFileCache!=null&&(!javaFileCache.incrementalFileMd5Map.isEmpty()||!javaFileCache.modifiedFileMd5Map.isEmpty()))
-				||(jarFileCache!=null&&(!jarFileCache.incrementalFileMd5Map.isEmpty()||!jarFileCache.modifiedFileMd5Map.isEmpty()))){
+		if((javaFileCache!=null&&(!javaFileCache.changedFileMap.isEmpty()))
+				||(jarFileCache!=null&&(!jarFileCache.changedFileMap.isEmpty()))){
 			allCompileFileHasCache=false;
 		}else{
 			allCompileFileHasCache=true;
