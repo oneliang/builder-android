@@ -46,9 +46,9 @@ public class PackageResourceHandler extends AbstractAndroidHandler {
 			String androidManifest=this.androidConfiguration.getPublicAndroidProject().getAndroidManifestOutput();
 			List<String> assetsList=new ArrayList<String>();
 			assetsList.add(this.androidConfiguration.getMainAndroidProject().getPrepareAssetsOutput());
-			String dexOutput=this.androidConfiguration.getMainAndroidProject().getDexOutput();
-			FileUtil.createDirectory(dexOutput);
-			String resourceFullFilename=dexOutput+"/"+AndroidProject.RESOURCE_FILE;
+			String mergeResourceOutput=this.androidConfiguration.getMainAndroidProject().getMergeResourceOutput();
+			FileUtil.createDirectory(mergeResourceOutput);
+			String resourceFullFilename=mergeResourceOutput+"/"+AndroidProject.RESOURCE_FILE;
 			List<String> resourceDirectoryList=new ArrayList<String>(this.androidConfiguration.findDirectoryOfAndroidProjectList(this.androidConfiguration.getAndroidProjectList(),DirectoryType.RES));
 			if(FileUtil.isExist(this.androidConfiguration.getPublicRAndroidProject().getResourceOutput())){
 				resourceDirectoryList.add(this.androidConfiguration.getPublicRAndroidProject().getResourceOutput());

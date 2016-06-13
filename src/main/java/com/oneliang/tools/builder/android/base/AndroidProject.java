@@ -40,7 +40,7 @@ public class AndroidProject extends JavaProject{
 	public static final String ALL_CLASSES_JAR="allClasses.jar";
 	public static final String ALL_ORIGINAL_CLASSES_JAR="allOriginalClasses.jar";
 	public static final String AUTO_DEX_DEX_CLASSES_PREFIX="dexClasses";
-	public static final String CLASSES_DEX="classes.dex";
+	public static final String CLASSES="classes";
 	public static final String RESOURCE_FILE="resources.ap_";
 	public static final String DIFFERENT_JAR="different.jar";
 	public static final String IDS_XML="ids.xml";
@@ -82,6 +82,8 @@ public class AndroidProject extends JavaProject{
 	private String patchPrepareOutput=null;
 	private String patchDifferentOutput=null;
 	private String resourceOutput=null;
+	private String mergeDexOutput=null;
+	private String mergeResourceOutput=null;
 	//output file
 	private String unsignedApkFullFilename=null;
 	private String apkFullFilename=null;
@@ -152,6 +154,8 @@ public class AndroidProject extends JavaProject{
 		this.patchPrepareOutput=this.patchOutput+"/prepare";
 		this.patchDifferentOutput=this.patchOutput+"/different";
 		this.resourceOutput=this.outputHome+"/res";
+		this.mergeDexOutput=this.outputHome+"/mergeDex";
+		this.mergeResourceOutput=this.outputHome+"/mergeResource";
 
 		this.androidManifestList.add(this.home+"/"+ANDROID_MANIFEST);
 		this.proguardCfg=this.home+"/"+PROGUARD_CFG;
@@ -494,5 +498,19 @@ public class AndroidProject extends JavaProject{
 	 */
 	public String getResourceOutput() {
 		return resourceOutput;
+	}
+
+	/**
+	 * @return the mergeDexOutput
+	 */
+	public String getMergeDexOutput() {
+		return mergeDexOutput;
+	}
+
+	/**
+	 * @return the mergeResourceOutput
+	 */
+	public String getMergeResourceOutput() {
+		return mergeResourceOutput;
 	}
 }

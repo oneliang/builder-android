@@ -24,7 +24,7 @@ public class GenerateApkPatchHandler extends AbstractAndroidHandler{
 			String differentOutputFullFilename=this.androidConfiguration.getPatchAndroidProject().getDifferentOutput()+Constant.Symbol.SLASH_LEFT+AndroidProject.DIFFERENT_JAR;
 			String thisTimeAllClassesJarFullFilename=this.androidConfiguration.getMainAndroidProject().getAutoDexAllClassesJar();
 			FileUtil.differZip(differentOutputFullFilename, inputAllClassesJarFullFilename, thisTimeAllClassesJarFullFilename);
-			String outputDexFullFilename=patchPrepareOutput+Constant.Symbol.SLASH_LEFT+AndroidProject.CLASSES_DEX;
+			String outputDexFullFilename=patchPrepareOutput+Constant.Symbol.SLASH_LEFT+AndroidProject.CLASSES+Constant.Symbol.DOT+Constant.File.DEX;
 			FileUtil.createFile(outputDexFullFilename);
 			BuilderUtil.androidDx(outputDexFullFilename, Arrays.asList(differentOutputFullFilename), true);
 			this.generateEmptyAndroidManifest(this.androidConfiguration.getPatchAndroidProject().getAndroidManifestOutput());
