@@ -47,7 +47,6 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 	public static final String MAP_KEY_PROJECT_WORKSPACE="projectWorkspace";
 	public static final String MAP_KEY_PROJECT_IDE="projectIde";
 	public static final String MAP_KEY_PROJECT_LOAD_MODE_ATTACH_BASE_CONTEXT_MULTI_DEX="projectLoadModeAttachBaseContextMultiDex";
-	public static final String MAP_KEY_BUILD_OUTPUT="buildOutput";
 	public static final String MAP_KEY_BUILD_OUTPUT_ECLIPSE="buildOutputEclipse";
 	public static final String MAP_KEY_APK_DEBUG="apkDebug";
 	public static final String MAP_KEY_APK_PRE_RELEASE="apkPreRelease";
@@ -159,7 +158,6 @@ public abstract class AndroidConfiguration extends JavaConfiguration{
 		logger.info(MAP_KEY_ANDROID_SDK+Constant.Symbol.COLON+this.androidSdk);
 		logger.info(MAP_KEY_ANDROID_BUILD_TOOLS_VERSION+Constant.Symbol.COLON+this.android.getBuildTools());
 		logger.info(MAP_KEY_PROJECT_MAIN_PROPERTIES+Constant.Symbol.COLON+this.projectMainProperties);
-		logger.info(MAP_KEY_BUILD_OUTPUT+Constant.Symbol.COLON+this.buildOutput);
 		logger.info(MAP_KEY_BUILD_OUTPUT_ECLIPSE+Constant.Symbol.COLON+this.buildOutputEclipse);
 		logger.info(MAP_KEY_APK_DEBUG+Constant.Symbol.COLON+this.apkDebug);
 		logger.info(MAP_KEY_APK_PRE_RELEASE+Constant.Symbol.COLON+this.apkPreRelease);
