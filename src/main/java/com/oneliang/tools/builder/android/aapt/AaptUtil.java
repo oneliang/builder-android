@@ -195,6 +195,9 @@ public final class AaptUtil {
 			String resourceType = node.getNodeName();
 			if (resourceType.equals(ITEM_TAG)) {
 				resourceType = node.getAttributes().getNamedItem("type").getNodeValue();
+				if(resourceType.equals("id")){
+					resourceCollector.addIgnoreId(node.getAttributes().getNamedItem("name").getNodeValue());
+				}
 			}
 
 			if (IGNORED_TAGS.contains(resourceType)) {

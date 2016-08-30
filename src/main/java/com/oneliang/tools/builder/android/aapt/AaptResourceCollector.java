@@ -46,6 +46,7 @@ public class AaptResourceCollector {
 	private final Map<RType, Set<RDotTxtEntry>> rTypeIncreaseResourceMap;
 	private final Map<String, Set<String>> duplicateResourceMap;
 	private final Map<String, String> sanitizeNameMap;
+	private final Set<String> ignoreIdSet;
 
 	public AaptResourceCollector() {
 		this.rTypeResourceDirectoryMap = new HashMap<RType, Map<String, Set<ResourceDirectory>>>();
@@ -57,6 +58,7 @@ public class AaptResourceCollector {
 		this.duplicateResourceMap = new HashMap<String, Set<String>>();
 		this.sanitizeNameMap = new HashMap<String, String>();
 		this.originalResourceMap = new HashMap<RDotTxtEntry, RDotTxtEntry>();
+		this.ignoreIdSet=new HashSet<String>();
 		//attr type must 1
 		this.currentTypeId = 2;
 	}
@@ -328,5 +330,16 @@ public class AaptResourceCollector {
 	 */
 	public Map<RType, Map<String, Set<ResourceDirectory>>> getRTypeResourceDirectoryMap() {
 		return rTypeResourceDirectoryMap;
+	}
+
+	void addIgnoreId(String name){
+		ignoreIdSet.add(name);
+	}
+
+	/**
+	 * @return the ignoreIdSet
+	 */
+	public Set<String> getIgnoreIdSet() {
+		return ignoreIdSet;
 	}
 }
