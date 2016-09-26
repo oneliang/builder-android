@@ -38,6 +38,7 @@ dependencies {
 	compile 'com.oneliang:third-party-util:1.0'
 	compile 'com.oneliang:builder-java:1.0'
 	compile 'com.oneliang:auto-dex:1.0'
+	compile 'com.tencent.tinker:tinker-patch-lib:1.3.0-SNAPSHOT'
 }
 
 task sourceJar(type: Jar) {
@@ -61,4 +62,9 @@ publishing {
             //url "$buildDir/repo" // change to point to your repo, e.g. http://my.org/repo
         }
     }
+}
+
+task copyDependencies(type: Copy) {
+    into "$buildDir/dependencies"
+    from configurations.runtime
 }
