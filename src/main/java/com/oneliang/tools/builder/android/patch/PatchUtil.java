@@ -415,8 +415,8 @@ public final class PatchUtil {
 		try {
 			FileUtil.createFile(outputIdsXmlFullFilename);
 			FileUtil.createFile(outputPublicXmlFullFilename);
-			idsWriter = new PrintWriter(new FileOutputStream(outputIdsXmlFullFilename));
-			publicWriter = new PrintWriter(new FileOutputStream(outputPublicXmlFullFilename));
+			idsWriter = new PrintWriter(new File(outputIdsXmlFullFilename), Constant.Encoding.UTF8);
+			publicWriter = new PrintWriter(new File(outputPublicXmlFullFilename), Constant.Encoding.UTF8);
 			idsWriter.println("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 			publicWriter.println("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 			idsWriter.println("<resources>");
