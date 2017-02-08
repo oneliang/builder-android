@@ -210,9 +210,9 @@ public class AndroidProject extends JavaProject{
 		stringBuilder.append("classesOutput:"+this.classesOutput+",");
 		stringBuilder.append("genOutput:"+this.genOutput+",");
 		stringBuilder.append("cacheOutput:"+this.cacheOutput+",");
-		if(this.sources!=null&&this.sources.length>0){
+		if(this.sourceDirectoryList!=null&&!this.sourceDirectoryList.isEmpty()){
 			stringBuilder.append("sources:[");
-			for(String source:this.sources){
+			for(String source:this.sourceDirectoryList){
 				stringBuilder.append(source+",");
 			}
 			stringBuilder.append("],");
