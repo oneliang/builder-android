@@ -178,7 +178,7 @@ public class AndroidProject extends JavaProject{
 	 * parse package name
 	 * @return String
 	 */
-	protected String parsePackageName(){
+	public String parsePackageName(){
 		String packageName=null;
 		if(!this.androidManifestList.isEmpty()){
 			String androidManifest=this.androidManifestList.get(0);
