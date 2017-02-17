@@ -13,7 +13,6 @@ import com.oneliang.tools.builder.android.aapt.RDotTxtEntry;
 import com.oneliang.tools.builder.android.aapt.RDotTxtEntry.RType;
 import com.oneliang.tools.builder.android.base.AndroidProject;
 import com.oneliang.tools.builder.android.base.AndroidProject.DirectoryType;
-import com.oneliang.tools.builder.android.patch.PatchUtil;
 import com.oneliang.util.common.StringUtil;
 import com.oneliang.util.file.FileUtil;
 
@@ -33,7 +32,7 @@ public class GeneratePublicResourceHandler extends AbstractAndroidHandler{
 		String rTxtFullFilename=this.androidConfiguration.getApkPatchInputRTxt();
 		Map<RType, Set<RDotTxtEntry>> rTypeResourceMap=null;
 		if(StringUtil.isNotBlank(rTxtFullFilename)&&FileUtil.isExist(rTxtFullFilename)){
-			rTypeResourceMap=PatchUtil.readRTxt(rTxtFullFilename);
+			rTypeResourceMap=AaptUtil.readRTxt(rTxtFullFilename);
 		}else{
 			rTypeResourceMap=new HashMap<RType, Set<RDotTxtEntry>>();
 		}
@@ -55,7 +54,7 @@ public class GeneratePublicResourceHandler extends AbstractAndroidHandler{
 		String originalOutputPublicXmlFullFilename=this.androidConfiguration.getPublicRAndroidProject().getResourceOriginalOutput()+Constant.Symbol.SLASH_LEFT+"values/"+this.androidConfiguration.getProjectMain()+Constant.Symbol.UNDERLINE+AndroidProject.PUBLIC_XML;
 		String newOutputIdsXmlFullFilename=this.androidConfiguration.getPublicRAndroidProject().getResourceOutput()+Constant.Symbol.SLASH_LEFT+"values/"+this.androidConfiguration.getProjectMain()+Constant.Symbol.UNDERLINE+AndroidProject.IDS_XML;
 		String newOutputPublicXmlFullFilename=this.androidConfiguration.getPublicRAndroidProject().getResourceOutput()+Constant.Symbol.SLASH_LEFT+"values/"+this.androidConfiguration.getProjectMain()+Constant.Symbol.UNDERLINE+AndroidProject.PUBLIC_XML;
-		PatchUtil.generatePublicResourceXml(aaptResourceCollector, originalOutputIdsXmlFullFilename, originalOutputPublicXmlFullFilename);
+		AaptUtil.generatePublicResourceXml(aaptResourceCollector, originalOutputIdsXmlFullFilename, originalOutputPublicXmlFullFilename);
 		//copy original id.xml and public.xml to resource output
 		FileUtil.copyFile(originalOutputIdsXmlFullFilename, newOutputIdsXmlFullFilename, FileUtil.FileCopyType.FILE_TO_FILE);
 		FileUtil.copyFile(originalOutputPublicXmlFullFilename, newOutputPublicXmlFullFilename, FileUtil.FileCopyType.FILE_TO_FILE);
