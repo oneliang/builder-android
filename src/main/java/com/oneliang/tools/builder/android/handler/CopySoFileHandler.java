@@ -13,7 +13,7 @@ import com.oneliang.util.file.FileUtil;
 public class CopySoFileHandler extends AbstractAndroidHandler {
 
     public boolean handle() {
-        String soFileCacheFullFilename = this.androidConfiguration.getPublicRAndroidProject().getCacheOutput() + Constant.Symbol.SLASH_LEFT + CACHE_SO_FILE;
+        String soFileCacheFullFilename = this.androidConfiguration.getPublicAndroidProject().getCacheOutput() + Constant.Symbol.SLASH_LEFT + CACHE_SO_FILE;
         final List<String> libDirectoryList = this.androidConfiguration.findDirectoryOfAndroidProjectList(this.androidConfiguration.getAndroidProjectList(), DirectoryType.LIBS);
         CacheOption cacheOption = new CacheOption(soFileCacheFullFilename, libDirectoryList);
         cacheOption.fileSuffix = Constant.Symbol.DOT + Constant.File.SO;

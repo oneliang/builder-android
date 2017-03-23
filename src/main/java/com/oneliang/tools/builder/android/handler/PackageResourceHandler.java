@@ -18,7 +18,7 @@ public class PackageResourceHandler extends AbstractAndroidHandler {
 
     public boolean handle() {
         final List<String> assetsDirectoryList = this.androidConfiguration.findDirectoryOfAndroidProjectList(this.androidConfiguration.getAndroidProjectList(), AndroidProject.DirectoryType.ASSETS);
-        String assetsFileCacheFullFilename = this.androidConfiguration.getPublicRAndroidProject().getCacheOutput() + "/" + CACHE_ASSETS_FILE;
+        String assetsFileCacheFullFilename = this.androidConfiguration.getPublicAndroidProject().getCacheOutput() + "/" + CACHE_ASSETS_FILE;
         CacheOption cacheOption = new CacheOption(assetsFileCacheFullFilename, assetsDirectoryList);
         cacheOption.changedFileProcessor = new ChangedFileProcessor() {
             public boolean process(Iterable<ChangedFile> changedFileIterable) {
