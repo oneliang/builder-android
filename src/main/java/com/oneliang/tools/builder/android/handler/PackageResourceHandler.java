@@ -17,7 +17,8 @@ import com.oneliang.util.file.FileUtil;
 public class PackageResourceHandler extends AbstractAndroidHandler {
 
     public boolean handle() {
-        final List<String> assetsDirectoryList = this.androidConfiguration.findDirectoryOfAndroidProjectList(this.androidConfiguration.getAndroidProjectList(), AndroidProject.DirectoryType.ASSETS);
+        List<String> maybeDuplicateAssetsDirectoryList = this.androidConfiguration.findDirectoryOfAndroidProjectList(this.androidConfiguration.getAndroidProjectList(), AndroidProject.DirectoryType.ASSETS);
+        final List<String> assetsDirectoryList = this.filterDuplicateFile(maybeDuplicateAssetsDirectoryList);
         String assetsFileCacheFullFilename = this.androidConfiguration.getPublicAndroidProject().getCacheOutput() + "/" + CACHE_ASSETS_FILE;
         CacheOption cacheOption = new CacheOption(assetsFileCacheFullFilename, assetsDirectoryList);
         cacheOption.changedFileProcessor = new ChangedFileProcessor() {
@@ -46,24 +47,40 @@ public class PackageResourceHandler extends AbstractAndroidHandler {
         };
         this.dealWithCache(cacheOption);
 
-        if (!this.androidConfiguration.isAllResourceFileHasCache() || !this.androidConfiguration.isAllAssetsFileHasCache()) {
-            String androidManifest = this.androidConfiguration.getPublicAndroidProject().getAndroidManifestOutput();
-            List<String> assetsList = new ArrayList<String>();
-            assetsList.add(this.androidConfiguration.getMainAndroidProject().getPrepareAssetsOutput());
-            String mergeResourceOutput = this.androidConfiguration.getMainAndroidProject().getMergeResourceOutput();
-            FileUtil.createDirectory(mergeResourceOutput);
-            String resourceFullFilename = mergeResourceOutput + "/" + AndroidProject.RESOURCE_FILE;
-            List<String> resourceDirectoryList = new ArrayList<String>(this.androidConfiguration.findDirectoryOfAndroidProjectList(this.androidConfiguration.getAndroidProjectList(), DirectoryType.RES));
-            if (FileUtil.isExist(this.androidConfiguration.getPublicRAndroidProject().getResourceOutput())) {
-                resourceDirectoryList.add(this.androidConfiguration.getPublicRAndroidProject().getResourceOutput());
-            }
-            int result = BuilderUtil.executeAndroidAaptToPackageResource(this.android.getAaptExecutor(), androidManifest, resourceDirectoryList, assetsList, Arrays.asList(this.androidConfiguration.getMainAndroidApiJar()), resourceFullFilename, this.androidConfiguration.isApkDebug());
-            logger.info("Aapt package resource result code:" + result);
-            // unzip resources.ap_
-            if (FileUtil.isExist(resourceFullFilename)) {
-                FileUtil.unzip(resourceFullFilename, this.androidConfiguration.getMainAndroidProject().getPrepareOutput(), null);
-            }
+        List<String> maybeDuplicateResourceDirectoryList = new ArrayList<String>(this.androidConfiguration.findDirectoryOfAndroidProjectList(this.androidConfiguration.getAndroidProjectList(), DirectoryType.RES));
+        if (FileUtil.isExist(this.androidConfiguration.getPublicRAndroidProject().getResourceOutput())) {
+            maybeDuplicateResourceDirectoryList.add(this.androidConfiguration.getPublicRAndroidProject().getResourceOutput());
         }
+        final List<String> resourceDirectoryList = this.filterDuplicateFile(maybeDuplicateResourceDirectoryList);
+        String resourceFileCacheFullFilename = this.androidConfiguration.getPublicAndroidProject().getCacheOutput() + "/" + CACHE_RESOURCE_FILE;
+        cacheOption = new CacheOption(resourceFileCacheFullFilename, resourceDirectoryList);
+        cacheOption.changedFileProcessor = new CacheOption.ChangedFileProcessor() {
+            public boolean process(Iterable<ChangedFile> changedFileIterable) {
+                boolean saveCache = false;
+                if (changedFileIterable != null && changedFileIterable.iterator().hasNext()) {
+                    String androidManifest = androidConfiguration.getPublicAndroidProject().getAndroidManifestOutput();
+                    List<String> assetsList = new ArrayList<String>();
+                    assetsList.add(androidConfiguration.getMainAndroidProject().getPrepareAssetsOutput());
+                    String mergeResourceOutput = androidConfiguration.getMainAndroidProject().getMergeResourceOutput();
+                    FileUtil.createDirectory(mergeResourceOutput);
+                    String resourceFullFilename = mergeResourceOutput + "/" + AndroidProject.RESOURCE_FILE;
+
+                    int result = BuilderUtil.executeAndroidAaptToPackageResource(android.getAaptExecutor(), androidManifest, resourceDirectoryList, assetsList, Arrays.asList(androidConfiguration.getMainAndroidApiJar()), resourceFullFilename, androidConfiguration.isApkDebug());
+                    logger.info("Aapt package resource result code:" + result);
+                    // unzip resources.ap_
+                    if (FileUtil.isExist(resourceFullFilename)) {
+                        FileUtil.unzip(resourceFullFilename, androidConfiguration.getMainAndroidProject().getPrepareOutput(), null);
+                    }
+                    if (result == 0) {
+                        saveCache = true;
+                    }
+                } else {
+                    androidConfiguration.setAllResourceFileHasCache(true);
+                }
+                return saveCache;
+            }
+        };
+        this.dealWithCache(cacheOption);
         return true;
     }
 

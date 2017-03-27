@@ -27,7 +27,7 @@ public class PatchAndroidProject {
 		File file=new File(outputHome);
 		this.outputHome=file.getAbsolutePath()+"/"+this.name;
 		this.genOutput=this.outputHome+"/"+AndroidProject.GEN;
-		this.sourceOutput=this.outputHome+"/"+Project.SRC;
+		this.sourceOutput=this.outputHome+"/"+"src";
 		this.resourceOutput=this.outputHome+"/"+AndroidProject.RES;
 		this.resourceModifyOutput=this.outputHome+"/"+AndroidProject.RES+"Modify";
 		this.prepareOutput=this.outputHome+"/prepare";

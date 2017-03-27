@@ -8,22 +8,24 @@ import com.oneliang.util.file.FileUtil;
 
 public class MergeAllAndroidProjectJarHandler extends AbstractAndroidHandler {
 
-	public boolean handle() {
-		List<AndroidProject> androidProjectList=this.androidConfiguration.getAndroidProjectList();
-		List<String> allAndroidProjectOriginalJarList=new ArrayList<String>();
-		List<String> allAndroidProjectJarList=new ArrayList<String>();
-		for(AndroidProject androidProject:androidProjectList){
-			if(!this.androidConfiguration.isApkDebug()){
-				allAndroidProjectOriginalJarList.addAll(this.getAndroidProjectJarListWithoutProguard(androidProject));
-			}
-			allAndroidProjectJarList.addAll(this.getAndroidProjectJarListWithProguard(androidProject));
-		}
-		if(!this.androidConfiguration.isApkDebug()){
-			final String allOriginalClassesJar=this.androidConfiguration.getMainAndroidProject().getAutoDexAllOriginalClassesJar();
-			FileUtil.mergeZip(allOriginalClassesJar, allAndroidProjectOriginalJarList);
-		}
-		final String allClassesJar=this.androidConfiguration.getMainAndroidProject().getAutoDexAllClassesJar();
-		FileUtil.mergeZip(allClassesJar, allAndroidProjectJarList);
-		return true;
-	}
+    public boolean handle() {
+        List<AndroidProject> androidProjectList = this.androidConfiguration.getAndroidProjectList();
+        List<String> allAndroidProjectOriginalJarList = new ArrayList<String>();
+        List<String> allAndroidProjectJarList = new ArrayList<String>();
+        for (AndroidProject androidProject : androidProjectList) {
+            if (!this.androidConfiguration.isApkDebug()) {
+                allAndroidProjectOriginalJarList.addAll(this.getAndroidProjectJarListWithoutProguard(androidProject));
+            }
+            allAndroidProjectJarList.addAll(this.getAndroidProjectJarListWithProguard(androidProject));
+        }
+        allAndroidProjectJarList = this.filterDuplicateFile(allAndroidProjectJarList);
+        if (!this.androidConfiguration.isApkDebug()) {
+            final String allOriginalClassesJar = this.androidConfiguration.getMainAndroidProject().getAutoDexAllOriginalClassesJar();
+            allAndroidProjectOriginalJarList = this.filterDuplicateFile(allAndroidProjectOriginalJarList);
+            FileUtil.mergeZip(allOriginalClassesJar, allAndroidProjectOriginalJarList);
+        }
+        final String allClassesJar = this.androidConfiguration.getMainAndroidProject().getAutoDexAllClassesJar();
+        FileUtil.mergeZip(allClassesJar, allAndroidProjectJarList);
+        return true;
+    }
 }

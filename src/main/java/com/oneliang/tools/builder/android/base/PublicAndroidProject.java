@@ -31,7 +31,7 @@ public class PublicAndroidProject {
 	public PublicAndroidProject(String outputHome,String name) {
 		this.name=name;
 		File file=new File(outputHome);
-		this.outputHome=file.getAbsolutePath()+"/"+this.name;
+		this.outputHome=file.getAbsolutePath()+"/"+this.name+"/"+Project.BUILD;
 		this.genOutput=this.outputHome+"/"+AndroidProject.GEN;
 		this.genOriginalOutput=this.outputHome+"/"+AndroidProject.GEN+"Original";
 		this.classesOutput=this.outputHome+"/"+Project.CLASSES;
