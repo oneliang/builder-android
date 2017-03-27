@@ -16,11 +16,6 @@ public class MergeAndroidManifestHandler extends AbstractAndroidHandler {
             // if(!this.androidConfiguration.getProjectMain().equals(androidProject.getName())){
             allAndroidManifestList.addAll(androidProject.getAndroidManifestList());
             // }
-            if (androidProject.getAndroidManifestList() != null) {
-                for (String androidManifest : androidProject.getAndroidManifestList()) {
-                    logger.info(androidManifest);
-                }
-            }
             for (String sourceDirectory : androidProject.getSourceDirectoryList()) {
                 File sourceDirectoryFile = new File(sourceDirectory);
                 if (sourceDirectoryFile.getName().equals("src")) {
