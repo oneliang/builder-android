@@ -98,6 +98,7 @@ public final class AaptUtil {
         matchOption.fileSuffix = Constant.Symbol.DOT + Constant.File.XML;
         List<String> xmlFullFilenameList = FileUtil.findMatchFile(matchOption);
         if (xmlFullFilenameList != null) {
+            String directory = new File(resourceDirectory).getAbsolutePath();
             for (String xmlFullFilename : xmlFullFilenameList) {
                 File xmlFile = new File(xmlFullFilename);
                 String parentFullFilename = xmlFile.getParent();
@@ -106,13 +107,14 @@ public final class AaptUtil {
                     // Ignore files under values* directories.
                     continue;
                 }
-                processXmlFile(xmlFullFilename, references, resourceCollector);
+                processXmlFile(xmlFullFilename, references, resourceCollector, directory);
             }
         }
     }
 
     private static void collectResources(String resourceDirectory, AaptResourceCollector resourceCollector) throws Exception {
         File resourceDirectoryFile = new File(resourceDirectory);
+        String directory = resourceDirectoryFile.getAbsolutePath();
         File[] fileArray = resourceDirectoryFile.listFiles();
         if (fileArray != null) {
             for (File file : fileArray) {
@@ -122,9 +124,9 @@ public final class AaptUtil {
                         if (!isAValuesDirectory(directoryName)) {
                             throw new AaptUtilException("'" + directoryName + "' is not a valid values directory.");
                         }
-                        processValues(file.getAbsolutePath(), resourceCollector);
+                        processValues(file.getAbsolutePath(), resourceCollector, directory);
                     } else {
-                        processFileNamesInDirectory(file.getAbsolutePath(), resourceCollector);
+                        processFileNamesInDirectory(file.getAbsolutePath(), resourceCollector, directory);
                     }
                 }
             }
@@ -144,7 +146,7 @@ public final class AaptUtil {
         return directoryName.equals("values") || directoryName.startsWith("values-");
     }
 
-    public static void processFileNamesInDirectory(String resourceDirectory, AaptResourceCollector resourceCollector) throws IOException {
+    public static void processFileNamesInDirectory(String resourceDirectory, AaptResourceCollector resourceCollector, String directory) throws IOException {
         File resourceDirectoryFile = new File(resourceDirectory);
         String directoryName = resourceDirectoryFile.getName();
         int dashIndex = directoryName.indexOf('-');
@@ -166,14 +168,14 @@ public final class AaptUtil {
                 String resourceName = dotIndex != -1 ? filename.substring(0, dotIndex) : filename;
 
                 RType rType = RESOURCE_TYPES.get(directoryName);
-                resourceCollector.addIntResourceIfNotPresent(rType, resourceName);
+                resourceCollector.addIntResourceIfNotPresent(rType, resourceName, directory);
                 ResourceDirectory resourceDirectoryBean = new ResourceDirectory(file.getParentFile().getName(), file.getAbsolutePath());
                 resourceCollector.addRTypeResourceName(rType, resourceName, null, resourceDirectoryBean);
             }
         }
     }
 
-    public static void processValues(String resourceDirectory, AaptResourceCollector resourceCollector) throws Exception {
+    public static void processValues(String resourceDirectory, AaptResourceCollector resourceCollector, String directory) throws Exception {
         File resourceDirectoryFile = new File(resourceDirectory);
         File[] fileArray = resourceDirectoryFile.listFiles();
         if (fileArray != null) {
@@ -185,12 +187,12 @@ public final class AaptUtil {
                     // warning
                     continue;
                 }
-                processValuesFile(file.getAbsolutePath(), resourceCollector);
+                processValuesFile(file.getAbsolutePath(), resourceCollector, directory);
             }
         }
     }
 
-    public static void processValuesFile(String valuesFullFilename, AaptResourceCollector resourceCollector) throws Exception {
+    public static void processValuesFile(String valuesFullFilename, AaptResourceCollector resourceCollector, String directory) throws Exception {
         Document document = JavaXmlUtil.parse(valuesFullFilename);
         String directoryName = new File(valuesFullFilename).getParentFile().getName();
         Element root = document.getDocumentElement();
@@ -243,14 +245,14 @@ public final class AaptUtil {
                 break;
             }
             try {
-                addToResourceCollector(resourceCollector, new ResourceDirectory(directoryName, valuesFullFilename), node, rType, resourceValue);
+                addToResourceCollector(resourceCollector, new ResourceDirectory(directoryName, valuesFullFilename), node, rType, resourceValue, directory);
             } catch (Exception e) {
                 throw new AaptUtilException(e.getMessage() + ",Process file error:" + valuesFullFilename, e);
             }
         }
     }
 
-    public static void processXmlFile(String xmlFullFilename, List<RDotTxtEntry> references, AaptResourceCollector resourceCollector) throws IOException, XPathExpressionException {
+    public static void processXmlFile(String xmlFullFilename, List<RDotTxtEntry> references, AaptResourceCollector resourceCollector, String directory) throws IOException, XPathExpressionException {
         Document document = JavaXmlUtil.parse(xmlFullFilename);
         NodeList nodesWithIds = (NodeList) ANDROID_ID_DEFINITION.evaluate(document, XPathConstants.NODESET);
         for (int i = 0; i < nodesWithIds.getLength(); i++) {
@@ -260,7 +262,7 @@ public final class AaptUtil {
             }
             // Preconditions.checkState(resourceName.startsWith(ID_DEFINITION_PREFIX));
 
-            resourceCollector.addIntResourceIfNotPresent(RType.ID, resourceName.substring(ID_DEFINITION_PREFIX.length()));
+            resourceCollector.addIntResourceIfNotPresent(RType.ID, resourceName.substring(ID_DEFINITION_PREFIX.length()), directory);
         }
 
         NodeList nodesUsingIds = (NodeList) ANDROID_ID_USAGE.evaluate(document, XPathConstants.NODESET);
@@ -290,7 +292,7 @@ public final class AaptUtil {
         }
     }
 
-    private static void addToResourceCollector(AaptResourceCollector resourceCollector, ResourceDirectory resourceDirectory, Node node, RType rType, String resourceValue) {
+    private static void addToResourceCollector(AaptResourceCollector resourceCollector, ResourceDirectory resourceDirectory, Node node, RType rType, String resourceValue, String directory) {
         String resourceName = sanitizeName(resourceCollector, extractNameAttribute(node));
         resourceCollector.addRTypeResourceName(rType, resourceName, resourceValue, resourceDirectory);
         if (rType.equals(RType.STYLEABLE)) {
@@ -303,17 +305,17 @@ public final class AaptUtil {
 
                 String rawAttrName = extractNameAttribute(attrNode);
                 String attrName = sanitizeName(resourceCollector, rawAttrName);
-                resourceCollector.addResource(RType.STYLEABLE, IdType.INT, String.format("%s_%s", resourceName, attrName), Integer.toString(count++));
+                resourceCollector.addResource(RType.STYLEABLE, IdType.INT, String.format("%s_%s", resourceName, attrName), Integer.toString(count++), directory);
 
                 if (!rawAttrName.startsWith("android:")) {
-                    resourceCollector.addIntResourceIfNotPresent(RType.ATTR, attrName);
+                    resourceCollector.addIntResourceIfNotPresent(RType.ATTR, attrName, directory);
                     resourceCollector.addRTypeResourceName(RType.ATTR, rawAttrName, nodeToString(attrNode, true), resourceDirectory);
                 }
             }
 
-            resourceCollector.addIntArrayResourceIfNotPresent(rType, resourceName, count);
+            resourceCollector.addIntArrayResourceIfNotPresent(rType, resourceName, count, directory);
         } else {
-            resourceCollector.addIntResourceIfNotPresent(rType, resourceName);
+            resourceCollector.addIntResourceIfNotPresent(rType, resourceName, directory);
         }
     }
 
@@ -353,9 +355,9 @@ public final class AaptUtil {
                 Set<RDotTxtEntry> rDotTxtEntrySet = entry.getValue();
                 for (RDotTxtEntry rDotTxtEntry : rDotTxtEntrySet) {
                     if (rDotTxtEntry.idType.equals(IdType.INT)) {
-                        aaptResourceCollector.addIntResourceIfNotPresent(rType, rDotTxtEntry.name);
+                        aaptResourceCollector.addIntResourceIfNotPresent(rType, rDotTxtEntry.name, null);
                     } else if (rDotTxtEntry.idType.equals(IdType.INT_ARRAY)) {
-                        aaptResourceCollector.addResource(rType, rDotTxtEntry.idType, rDotTxtEntry.name, rDotTxtEntry.idValue);
+                        aaptResourceCollector.addResource(rType, rDotTxtEntry.idType, rDotTxtEntry.name, rDotTxtEntry.idValue, null);
                     }
                 }
             }

@@ -64,6 +64,8 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
     public static final String MAP_KEY_APK_PATCH_RESOURCE_ITEM_MAPPING = "apkPatchResourceItemMapping";
     public static final String MAP_KEY_PROGUARD_CLASSPATH = "proguardClasspath";
     public static final String MAP_KEY_PACKAGE_NAME = "packageName";
+    public static final String MAP_KEY_MIN_SDK_VERSION = "minSdkVersion";
+    public static final String MAP_KEY_TARGET_SDK_VERSION = "targetSdkVersion";
 
     protected boolean needToClean = true;
     protected String androidSdk = null;
@@ -90,6 +92,8 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
     protected String androidProjectDexTaskNodeInsertName = null;
     protected String multiAndroidProjectDexTaskNodeInsertName = null;
     protected String packageName = null;
+    protected int minSdkVersion = 0;
+    protected int targetSdkVersion = 0;
 
     protected Android android = null;
     protected final List<AndroidProject> androidProjectList = new CopyOnWriteArrayList<AndroidProject>();
@@ -174,6 +178,8 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
         logger.info(MAP_KEY_AUTO_DEX_MAIN_DEX_OTHER_CLASSES + Constant.Symbol.COLON + this.autoDexMainDexOtherClasses);
         logger.info(MAP_KEY_APK_PATCH_INPUT_ALL_CLASSES_JAR + Constant.Symbol.COLON + this.apkPatchInputAllClassesJar);
         logger.info(MAP_KEY_PACKAGE_NAME + Constant.Symbol.COLON + this.packageName);
+        logger.info(MAP_KEY_MIN_SDK_VERSION + Constant.Symbol.COLON + this.minSdkVersion);
+        logger.info(MAP_KEY_TARGET_SDK_VERSION + Constant.Symbol.COLON + this.targetSdkVersion);
         logger.info(MAP_KEY_PROGUARD_CLASSPATH + Constant.Symbol.COLON + this.proguardClasspath);
     }
 
@@ -925,5 +931,33 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
      */
     public void setPackageName(String packageName) {
         this.packageName = packageName;
+    }
+
+    /**
+     * @return the minSdkVersion
+     */
+    public int getMinSdkVersion() {
+        return minSdkVersion;
+    }
+
+    /**
+     * @param minSdkVersion the minSdkVersion to set
+     */
+    public void setMinSdkVersion(int minSdkVersion) {
+        this.minSdkVersion = minSdkVersion;
+    }
+
+    /**
+     * @return the targetSdkVersion
+     */
+    public int getTargetSdkVersion() {
+        return targetSdkVersion;
+    }
+
+    /**
+     * @param targetSdkVersion the targetSdkVersion to set
+     */
+    public void setTargetSdkVersion(int targetSdkVersion) {
+        this.targetSdkVersion = targetSdkVersion;
     }
 }

@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 import com.google.common.base.Joiner;
 import com.oneliang.tools.builder.android.aapt.RDotTxtEntry.IdType;
 import com.oneliang.tools.builder.android.aapt.RDotTxtEntry.RType;
+import com.oneliang.util.common.StringUtil;
 
 /**
  * Responsible for collecting resources parsed by {@link MiniAapt} and assigning
@@ -47,6 +48,7 @@ public class AaptResourceCollector {
 	private final Map<String, Set<String>> duplicateResourceMap;
 	private final Map<String, String> sanitizeNameMap;
 	private final Set<String> ignoreIdSet;
+	private final Map<String, Map<RType, Set<RDotTxtEntry>>> directoryRTypeResourceMap;
 
 	public AaptResourceCollector() {
 		this.rTypeResourceDirectoryMap = new HashMap<RType, Map<String, Set<ResourceDirectory>>>();
@@ -59,6 +61,7 @@ public class AaptResourceCollector {
 		this.sanitizeNameMap = new HashMap<String, String>();
 		this.originalResourceMap = new HashMap<RDotTxtEntry, RDotTxtEntry>();
 		this.ignoreIdSet=new HashSet<String>();
+		this.directoryRTypeResourceMap = new HashMap<String, Map<RType, Set<RDotTxtEntry>>>();
 		//attr type must 1
 		this.currentTypeId = 2;
 	}
@@ -97,7 +100,7 @@ public class AaptResourceCollector {
 		}
 	}
 
-	public void addIntResourceIfNotPresent(RType rType, String name){//, ResourceDirectory resourceDirectory) {
+	public void addIntResourceIfNotPresent(RType rType, String name, String directory){//, ResourceDirectory resourceDirectory) {
 		if (!rTypeEnumeratorMap.containsKey(rType)) {
 			if(rType.equals(RType.ATTR)){
 				rTypeEnumeratorMap.put(rType, new ResourceIdEnumerator(1));
@@ -116,16 +119,23 @@ public class AaptResourceCollector {
 		}
 		if (!resourceSet.contains(entry)) {
 			String idValue = String.format("0x%08x", rTypeEnumeratorMap.get(rType).next());
-			addResource(rType, IdType.INT, name, idValue);//, resourceDirectory);
-		}
+			addResource(rType, IdType.INT, name, idValue, directory);//, resourceDirectory);
+        } else {// when entry is present,found it
+            for (RDotTxtEntry rDotTxtEntry : resourceSet) {
+                if (!rDotTxtEntry.equals(entry)) {
+                    continue;
+                }
+                addDirectoryRTypeResource(rType, rDotTxtEntry, directory);
+            }
+        }
 	}
 
-	public void addIntArrayResourceIfNotPresent(RType rType, String name, int numValues){//, ResourceDirectory resourceDirectory) {
+	public void addIntArrayResourceIfNotPresent(RType rType, String name, int numValues, String directory){//, ResourceDirectory resourceDirectory) {
 		// Robolectric expects the array to be populated with the right number
 		// of values, irrespective
 		// of what the values are.
 		String idValue = String.format("{ %s }", Joiner.on(",").join(Collections.nCopies(numValues, "0x7f000000")));
-		addResource(rType, IdType.INT_ARRAY, name, idValue);//, resourceDirectory);
+		addResource(rType, IdType.INT_ARRAY, name, idValue, directory);//, resourceDirectory);
 	}
 
 	/**
@@ -134,8 +144,9 @@ public class AaptResourceCollector {
 	 * @param idType
 	 * @param name
 	 * @param idValue
+	 * @param directory,may be find r type through directory
 	 */
-	public void addResource(RType rType, IdType idType, String name, String idValue){//, ResourceDirectory resourceDirectory) {
+	public void addResource(RType rType, IdType idType, String name, String idValue, String directory){//, ResourceDirectory resourceDirectory) {
 		Set<RDotTxtEntry> resourceSet=null;
 		if(this.rTypeResourceMap.containsKey(rType)){
 			resourceSet=this.rTypeResourceMap.get(rType);
@@ -154,6 +165,9 @@ public class AaptResourceCollector {
 			}
 			resourceSet.add(rDotTxtEntry);
 		}
+
+		addDirectoryRTypeResource(rType, rDotTxtEntry, directory);
+
 		Set<RDotTxtEntry> increaseResourceSet=null;
 		//new r dot txt entry
 		if(this.rTypeIncreaseResourceMap.containsKey(rType)){
@@ -166,6 +180,28 @@ public class AaptResourceCollector {
 			increaseResourceSet.add(rDotTxtEntry);
 //			addResourceDirectory(rType, name, resourceDirectory);
 		}
+	}
+
+	private void addDirectoryRTypeResource(RType rType, RDotTxtEntry rDotTxtEntry, String directory){
+	    if (StringUtil.isNotBlank(directory)) {
+            Map<RType, Set<RDotTxtEntry>> dirRTypeResourceMap = null;
+            if (this.directoryRTypeResourceMap.containsKey(directory)) {
+                dirRTypeResourceMap = this.directoryRTypeResourceMap.get(directory);
+            } else {
+                dirRTypeResourceMap = new HashMap<RType, Set<RDotTxtEntry>>();
+                this.directoryRTypeResourceMap.put(directory, dirRTypeResourceMap);
+            }
+            Set<RDotTxtEntry> dirResourceSet = null;
+            if (dirRTypeResourceMap.containsKey(rType)) {
+                dirResourceSet = dirRTypeResourceMap.get(rType);
+            } else {
+                dirResourceSet = new HashSet<RDotTxtEntry>();
+                dirRTypeResourceMap.put(rType, dirResourceSet);
+            }
+            if (!dirResourceSet.contains(rDotTxtEntry)) {
+                dirResourceSet.add(rDotTxtEntry);
+            }
+        }
 	}
 
 //	private void addResourceDirectory(RType rType,String name, ResourceDirectory resourceDirectory){
@@ -342,4 +378,11 @@ public class AaptResourceCollector {
 	public Set<String> getIgnoreIdSet() {
 		return ignoreIdSet;
 	}
+
+    /**
+     * @return the directoryRTypeResourceMap
+     */
+    public Map<String, Map<RType, Set<RDotTxtEntry>>> getDirectoryRTypeResourceMap() {
+        return directoryRTypeResourceMap;
+    }
 }

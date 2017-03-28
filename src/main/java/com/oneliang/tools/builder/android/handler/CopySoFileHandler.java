@@ -31,7 +31,10 @@ public class CopySoFileHandler extends AbstractAndroidHandler {
                         String directory = changedFile.directory;
                         String fullFilename = changedFile.fullFilename;
                         String from = fullFilename;
-                        String relativePath = new File(fullFilename).getAbsolutePath().substring(new File(directory).getAbsolutePath().length() + 1);
+                        String relativePath = new File(fullFilename).getAbsolutePath().substring(new File(directory).getAbsolutePath().length() + 1).replace(Constant.Symbol.SLASH_RIGHT, Constant.Symbol.SLASH_LEFT);
+                        if (!relativePath.startsWith("armeabi"+Constant.Symbol.SLASH_LEFT)) {
+                            continue;
+                        }
                         String to = prepareLibOutput + Constant.Symbol.SLASH_LEFT + relativePath;
                         FileUtil.copyFile(from, to, FileUtil.FileCopyType.FILE_TO_FILE);
                     }
