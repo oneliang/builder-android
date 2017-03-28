@@ -18,14 +18,22 @@ public class MergeAndroidManifestHandler extends AbstractAndroidHandler {
             // }
             for (String sourceDirectory : androidProject.getSourceDirectoryList()) {
                 File sourceDirectoryFile = new File(sourceDirectory);
-                if (sourceDirectoryFile.getName().equals("src")) {
-                    String androidManifest = new File(sourceDirectoryFile.getParent(), "AndroidManifest.xml").getAbsolutePath();
-                    if (FileUtil.isExist(androidManifest)) {
-                        allAndroidManifestList.add(androidManifest);
-                    }
+                if (!sourceDirectoryFile.getName().equals("src")) {
+                    continue;
+                }
+                String androidManifest = new File(sourceDirectoryFile.getParent(), "AndroidManifest.xml").getAbsolutePath();
+                if (FileUtil.isExist(androidManifest)) {
+                    allAndroidManifestList.add(androidManifest);
                 }
             }
         }
+        Object aarAndroidManifestXmlListObject = this.androidConfiguration.getTemporaryData(InitializeAndroidProjectForGradleHandler.TEMPORARY_DATA_AAR_ANDROID_MANIFEST_XML_LIST);
+        if (aarAndroidManifestXmlListObject != null && (aarAndroidManifestXmlListObject instanceof List)) {
+            @SuppressWarnings("unchecked")
+            List<String> aarAndroidManifestXmlList = (List<String>) aarAndroidManifestXmlListObject;
+            allAndroidManifestList.addAll(aarAndroidManifestXmlList);
+        }
+        allAndroidManifestList = this.filterDuplicateFile(allAndroidManifestList);
         logger.info("all android manifest size:" + allAndroidManifestList.size());
         String androidManifestOutput = this.androidConfiguration.getPublicAndroidProject().getAndroidManifestOutput();
         FileUtil.createFile(androidManifestOutput);
