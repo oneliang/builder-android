@@ -48,9 +48,6 @@ public class PackageResourceHandler extends AbstractAndroidHandler {
         this.dealWithCache(cacheOption);
 
         List<String> maybeDuplicateResourceDirectoryList = new ArrayList<String>(this.androidConfiguration.findDirectoryOfAndroidProjectList(this.androidConfiguration.getAndroidProjectList(), DirectoryType.RES));
-        if (FileUtil.isExist(this.androidConfiguration.getPublicRAndroidProject().getResourceOutput())) {
-            maybeDuplicateResourceDirectoryList.add(this.androidConfiguration.getPublicRAndroidProject().getResourceOutput());
-        }
         final List<String> resourceDirectoryList = this.filterDuplicateFile(maybeDuplicateResourceDirectoryList);
         String resourceFileCacheFullFilename = this.androidConfiguration.getPublicAndroidProject().getCacheOutput() + "/" + CACHE_RESOURCE_FILE;
         cacheOption = new CacheOption(resourceFileCacheFullFilename, resourceDirectoryList);
@@ -65,6 +62,11 @@ public class PackageResourceHandler extends AbstractAndroidHandler {
                     FileUtil.createDirectory(mergeResourceOutput);
                     String resourceFullFilename = mergeResourceOutput + "/" + AndroidProject.RESOURCE_FILE;
 
+                    //add ids.xml and public.xml
+                    if (FileUtil.isExist(androidConfiguration.getPublicRAndroidProject().getResourceOutput())) {
+                        resourceDirectoryList.add(androidConfiguration.getPublicRAndroidProject().getResourceOutput());
+                    }
+                    
                     int result = BuilderUtil.executeAndroidAaptToPackageResource(android.getAaptExecutor(), androidManifest, resourceDirectoryList, assetsList, Arrays.asList(androidConfiguration.getMainAndroidApiJar()), resourceFullFilename, androidConfiguration.isApkDebug());
                     logger.info("Aapt package resource result code:" + result);
                     // unzip resources.ap_

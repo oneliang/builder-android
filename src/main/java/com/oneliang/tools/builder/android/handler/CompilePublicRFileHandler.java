@@ -38,6 +38,7 @@ public class CompilePublicRFileHandler extends AbstractAndroidHandler {
                     String classesOutputDirectory = androidConfiguration.getPublicRAndroidProject().getClassesOutput();
                     FileUtil.createDirectory(classesOutputDirectory);
                     int result = BuilderUtil.javac(classpathList, sourceList, classesOutputDirectory, androidConfiguration.isApkDebug());
+//                    int result = BuilderUtil.executeJavac(java.getJavacExecutor(), classpathList, sourceList, classesOutputDirectory, androidConfiguration.isApkDebug());
                     if (result != 0) {
                         return false;
                     }

@@ -61,6 +61,7 @@ public class CompileAndroidProjectHandler extends AndroidProjectHandler {
 					int javacResult = 0;
 					try {
 						javacResult = BuilderUtil.javac(compileClasspathList, togetherSourceList, classesOutput, androidConfiguration.isApkDebug(), androidProject.getCompileProcessorPathList());
+//					    javacResult = BuilderUtil.executeJavac(java.getJavacExecutor(), compileClasspathList, togetherSourceList, classesOutput, androidConfiguration.isApkDebug(), androidProject.getCompileProcessorPathList());
 					} catch (Throwable e) {
 						logger.error(androidProject.getName() + Constant.Symbol.COLON + Constant.Base.EXCEPTION, e);
 						javacResult = 1;

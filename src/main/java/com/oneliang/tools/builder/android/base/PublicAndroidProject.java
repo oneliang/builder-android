@@ -126,4 +126,11 @@ public class PublicAndroidProject {
 	public String getResourceOriginalOutput() {
 		return resourceOriginalOutput;
 	}
+
+    /**
+     * @return the outputHome
+     */
+    public String getOutputHome() {
+        return outputHome;
+    }
 }

@@ -13,9 +13,13 @@ import com.oneliang.tools.builder.android.aapt.AaptUtil;
 import com.oneliang.tools.builder.android.aapt.RDotTxtEntry;
 import com.oneliang.tools.builder.android.aapt.RDotTxtEntry.RType;
 import com.oneliang.tools.builder.android.base.AndroidProject;
+import com.oneliang.tools.builder.android.base.AndroidProject.DirectoryType;
 import com.oneliang.tools.builder.android.base.AndroidProjectForGradle;
+import com.oneliang.tools.builder.android.base.PublicAndroidProject;
+import com.oneliang.tools.builder.base.BuilderUtil;
 import com.oneliang.tools.builder.base.ChangedFile;
 import com.oneliang.util.common.Generator;
+import com.oneliang.util.common.StringUtil;
 import com.oneliang.util.file.FileUtil;
 
 public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHandler {
@@ -34,6 +38,7 @@ public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHan
         Map<String, String> aarFileCacheMap = new HashMap<String, String>();
         List<AndroidProject> androidProjectList = this.androidConfiguration.getAndroidProjectList();
         List<String> androidManifestXmlList = new ArrayList<String>();
+        List<AarProject> aarProjectList = new ArrayList<AarProject>();
         for (AndroidProject androidProject : androidProjectList) {
             if (!(androidProject instanceof AndroidProjectForGradle)) {
                 continue;
@@ -67,6 +72,8 @@ public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHan
                     aarFileUnzipOutput = aarBuildCacheOutput + Constant.Symbol.SLASH_LEFT + dependencyFilename;
                     aarFileCacheMap.put(aarFileFullFilename, aarFileUnzipOutput);
 
+                    aarProjectList.add(new AarProject(dependencyFilename, aarFileUnzipOutput));
+
                     String aarMd5FullFilename = aarBuildCacheOutput + Constant.Symbol.SLASH_LEFT + dependencyFilename + "_md5.txt";
                     String newAarMd5 = Generator.MD5File(gradleDependency);
                     boolean aarHasChanged = false;
@@ -93,7 +100,7 @@ public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHan
                 }
                 // aar res
                 String aarResOutput = aarFileUnzipOutput + Constant.Symbol.SLASH_LEFT + AAR_RES;
-                androidProject.getResourceDirectoryList().add(aarResOutput);
+                androidProject.getResourceDirectoryList().add(0, aarResOutput);
 
                 // aar libs
                 String aarLibsOutput = aarFileUnzipOutput + Constant.Symbol.SLASH_LEFT + AAR_LIBS;
@@ -126,25 +133,6 @@ public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHan
                 // aar AndroidManifest.xml
                 String aarAndroidManifest = aarFileUnzipOutput + Constant.Symbol.SLASH_LEFT + AAR_ANDROID_MANIFEST_XML;
                 androidManifestXmlList.add(aarAndroidManifest);
-                // aar gen R.java and R.class
-                if (FileUtil.hasFile(aarResOutput)) {
-                    String aarResCacheFullFilename = aarFileUnzipOutput + Constant.Symbol.SLASH_LEFT + CACHE_RESOURCE_FILE;
-                    CacheOption cacheOption = new CacheOption(aarResCacheFullFilename, Arrays.asList(aarResOutput));
-                    cacheOption.changedFileProcessor = new CacheOption.ChangedFileProcessor() {
-                        public boolean process(Iterable<ChangedFile> changedFileIterable) {
-                            if (changedFileIterable != null && changedFileIterable.iterator().hasNext()) {
-                                Map<RType, Set<RDotTxtEntry>> rTypeResourceMap = AaptUtil.collectResource(Arrays.asList(aarResOutput)).getRTypeResourceMap();
-                                String packageName = AndroidProject.parsePackageName(aarAndroidManifest);
-                                String outputDirectory = androidConfiguration.getPublicAndroidProject().getGenOutput();
-                                AaptUtil.writeRJava(outputDirectory, packageName, rTypeResourceMap, false);
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                    };
-                    this.dealWithCache(cacheOption);
-                }
 
                 // aar aidl
                 String aarAidlOutput = aarFileUnzipOutput + Constant.Symbol.SLASH_LEFT + AAR_AIDL;
@@ -155,6 +143,70 @@ public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHan
         }
         androidManifestXmlList = this.filterDuplicateFile(androidManifestXmlList);
         this.androidConfiguration.putTemporaryData(TEMPORARY_DATA_AAR_ANDROID_MANIFEST_XML_LIST, androidManifestXmlList);
+
+        generatePublicRDotTxt();
+
+        generateAarRDotJava(aarProjectList);
         return true;
+    }
+
+    private void generateAarRDotJava(List<AarProject> aarProjectList) {
+        if (aarProjectList == null || aarProjectList.isEmpty()) {
+            return;
+        }
+        String rTxtFullFilename = this.androidConfiguration.getApkPatchInputRTxt();
+        Map<RType, Set<RDotTxtEntry>> rTypeResourceMap = null;
+        if (StringUtil.isNotBlank(rTxtFullFilename) && FileUtil.isExist(rTxtFullFilename)) {
+            rTypeResourceMap = AaptUtil.readRTxt(rTxtFullFilename);
+        } else {
+            rTypeResourceMap = new HashMap<RType, Set<RDotTxtEntry>>();
+        }
+        final Map<RType, Set<RDotTxtEntry>> finalRTypeResourceMap = rTypeResourceMap;
+        for (AarProject aarProject : aarProjectList) {
+            final String aarResOutput = aarProject.unzipOutput + Constant.Symbol.SLASH_LEFT + AAR_RES;
+            final String aarAndroidManifest = aarProject.unzipOutput + Constant.Symbol.SLASH_LEFT + AAR_ANDROID_MANIFEST_XML;
+            if (FileUtil.hasFile(aarResOutput)) {
+                String aarResCacheFullFilename = aarProject.unzipOutput + Constant.Symbol.SLASH_LEFT + CACHE_RESOURCE_FILE;
+                CacheOption cacheOption = new CacheOption(aarResCacheFullFilename, Arrays.asList(aarResOutput));
+                cacheOption.changedFileProcessor = new CacheOption.ChangedFileProcessor() {
+                    public boolean process(Iterable<ChangedFile> changedFileIterable) {
+                        if (changedFileIterable != null && changedFileIterable.iterator().hasNext()) {
+                            Map<RType, Set<RDotTxtEntry>> allRTypeResourceMap = AaptUtil.collectResource(Arrays.asList(aarResOutput), finalRTypeResourceMap).getRTypeResourceMap();
+                            String packageName = AndroidProject.parsePackageName(aarAndroidManifest);
+                            String outputDirectory = androidConfiguration.getPublicAndroidProject().getGenOutput();
+                            AaptUtil.writeRJava(outputDirectory, packageName, allRTypeResourceMap, false);
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                };
+                this.dealWithCache(cacheOption);
+            }
+        }
+    }
+
+    private void generatePublicRDotTxt() {
+        List<String> maybeDuplicateResourceDirectoryList = new ArrayList<String>(this.androidConfiguration.findDirectoryOfAndroidProjectList(this.androidConfiguration.getAndroidProjectList(), DirectoryType.RES));
+        final List<String> resourceDirectoryList = this.filterDuplicateFile(maybeDuplicateResourceDirectoryList);
+        String publicOutput = this.androidConfiguration.getPublicAndroidProject().getOutputHome();
+        FileUtil.createDirectory(publicOutput);
+        if (!this.androidConfiguration.getMainAndroidProject().getAndroidManifestList().isEmpty()) {
+            BuilderUtil.executeAndroidAaptToGenerateR(this.android.getAaptExecutor(), this.androidConfiguration.getMainAndroidProject().getAndroidManifestList().get(0), resourceDirectoryList, publicOutput, Arrays.asList(this.androidConfiguration.getMainAndroidApiJar()), this.androidConfiguration.isApkDebug());
+            String publicRDotTxt = publicOutput + Constant.Symbol.SLASH_LEFT + PublicAndroidProject.R_TXT;
+            if (FileUtil.isExist(publicRDotTxt)) {
+                this.androidConfiguration.setApkPatchInputRTxt(publicRDotTxt);
+            }
+        }
+    }
+
+    private class AarProject {
+        public final String name;
+        public final String unzipOutput;
+
+        public AarProject(String name, String unzipOutput) {
+            this.name = name;
+            this.unzipOutput = unzipOutput;
+        }
     }
 }
