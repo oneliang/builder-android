@@ -191,13 +191,26 @@ public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHan
         final List<String> resourceDirectoryList = this.filterDuplicateFile(maybeDuplicateResourceDirectoryList);
         String publicOutput = this.androidConfiguration.getPublicAndroidProject().getOutputHome();
         FileUtil.createDirectory(publicOutput);
-        if (!this.androidConfiguration.getMainAndroidProject().getAndroidManifestList().isEmpty()) {
-            BuilderUtil.executeAndroidAaptToGenerateR(this.android.getAaptExecutor(), this.androidConfiguration.getMainAndroidProject().getAndroidManifestList().get(0), resourceDirectoryList, publicOutput, Arrays.asList(this.androidConfiguration.getMainAndroidApiJar()), this.androidConfiguration.isApkDebug());
-            String publicRDotTxt = publicOutput + Constant.Symbol.SLASH_LEFT + PublicAndroidProject.R_TXT;
-            if (FileUtil.isExist(publicRDotTxt)) {
-                this.androidConfiguration.setApkPatchInputRTxt(publicRDotTxt);
+        String resourceFileCacheFullFilename = this.androidConfiguration.getPublicAndroidProject().getCacheOutput() + "/" + CACHE_RESOURCE_FILE;
+        CacheOption cacheOption = new CacheOption(resourceFileCacheFullFilename, resourceDirectoryList);
+        cacheOption.changedFileProcessor = new CacheOption.ChangedFileProcessor() {
+            public boolean process(Iterable<ChangedFile> changedFileIterable) {
+                boolean saveCache = false;
+                if (changedFileIterable != null && changedFileIterable.iterator().hasNext()) {
+                    if (!androidConfiguration.getMainAndroidProject().getAndroidManifestList().isEmpty()) {
+                        int result = BuilderUtil.executeAndroidAaptToGenerateR(android.getAaptExecutor(), androidConfiguration.getMainAndroidProject().getAndroidManifestList().get(0), resourceDirectoryList, publicOutput, Arrays.asList(androidConfiguration.getMainAndroidApiJar()), androidConfiguration.isApkDebug());
+                        String publicRDotTxt = publicOutput + Constant.Symbol.SLASH_LEFT + PublicAndroidProject.R_TXT;
+                        if (FileUtil.isExist(publicRDotTxt)) {
+                            androidConfiguration.setApkPatchInputRTxt(publicRDotTxt);
+                        }
+                        if (result == 0) {
+                            saveCache = true;
+                        }
+                    }
+                }
+                return saveCache;
             }
-        }
+        };
     }
 
     private class AarProject {
