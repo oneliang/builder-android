@@ -33,6 +33,7 @@ public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHan
     private static final String AAR_RES = "res";
     private static final String AAR_ANDROID_MANIFEST_XML = "AndroidManifest.xml";
     private static final String AAR_CLASSES_JAR = "classes.jar";
+    private static final String GEN_R_CACHE = "gen_R_cache";
 
     public boolean handle() {
         Map<String, String> aarFileCacheMap = new HashMap<String, String>();
@@ -191,7 +192,7 @@ public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHan
         final List<String> resourceDirectoryList = this.filterDuplicateFile(maybeDuplicateResourceDirectoryList);
         String publicOutput = this.androidConfiguration.getPublicAndroidProject().getOutputHome();
         FileUtil.createDirectory(publicOutput);
-        String resourceFileCacheFullFilename = this.androidConfiguration.getPublicAndroidProject().getCacheOutput() + "/" + CACHE_RESOURCE_FILE;
+        String resourceFileCacheFullFilename = this.androidConfiguration.getPublicAndroidProject().getCacheOutput() + "/" + GEN_R_CACHE;
         CacheOption cacheOption = new CacheOption(resourceFileCacheFullFilename, resourceDirectoryList);
         cacheOption.changedFileProcessor = new CacheOption.ChangedFileProcessor() {
             public boolean process(Iterable<ChangedFile> changedFileIterable) {
@@ -211,6 +212,7 @@ public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHan
                 return saveCache;
             }
         };
+        this.dealWithCache(cacheOption);
     }
 
     private class AarProject {
