@@ -193,6 +193,7 @@ public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHan
         String publicOutput = this.androidConfiguration.getPublicAndroidProject().getOutputHome();
         FileUtil.createDirectory(publicOutput);
         String resourceFileCacheFullFilename = this.androidConfiguration.getPublicAndroidProject().getCacheOutput() + "/" + GEN_R_CACHE;
+        String publicRDotTxt = publicOutput + Constant.Symbol.SLASH_LEFT + PublicAndroidProject.R_TXT;
         CacheOption cacheOption = new CacheOption(resourceFileCacheFullFilename, resourceDirectoryList);
         cacheOption.changedFileProcessor = new CacheOption.ChangedFileProcessor() {
             public boolean process(Iterable<ChangedFile> changedFileIterable) {
@@ -200,10 +201,6 @@ public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHan
                 if (changedFileIterable != null && changedFileIterable.iterator().hasNext()) {
                     if (!androidConfiguration.getMainAndroidProject().getAndroidManifestList().isEmpty()) {
                         int result = BuilderUtil.executeAndroidAaptToGenerateR(android.getAaptExecutor(), androidConfiguration.getMainAndroidProject().getAndroidManifestList().get(0), resourceDirectoryList, publicOutput, Arrays.asList(androidConfiguration.getMainAndroidApiJar()), androidConfiguration.isApkDebug());
-                        String publicRDotTxt = publicOutput + Constant.Symbol.SLASH_LEFT + PublicAndroidProject.R_TXT;
-                        if (FileUtil.isExist(publicRDotTxt)) {
-                            androidConfiguration.setApkPatchInputRTxt(publicRDotTxt);
-                        }
                         if (result == 0) {
                             saveCache = true;
                         }
@@ -213,6 +210,10 @@ public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHan
             }
         };
         this.dealWithCache(cacheOption);
+        
+        if (FileUtil.isExist(publicRDotTxt)) {
+            androidConfiguration.setApkPatchInputRTxt(publicRDotTxt);
+        }
     }
 
     private class AarProject {
