@@ -77,10 +77,10 @@ public class AndroidConfigurationForJson extends AndroidConfiguration {
                 }
             }
             // TODO: fix toolkit-box bug
-//            String res = androidProject.getHome() + Constant.Symbol.SLASH_LEFT + "res";
-//            if (FileUtil.isExist(res)) {
-//                androidProject.getResourceDirectoryList().add(res);
-//            }
+            String res = androidProject.getHome() + Constant.Symbol.SLASH_LEFT + "res";
+            if (FileUtil.isExist(res)) {
+                androidProject.getResourceDirectoryList().add(res);
+            }
             if (projectJsonObject.has("assets")) {
                 JsonArray assetsJsonArray = projectJsonObject.getJsonArray("assets");
                 int length = assetsJsonArray.length();
@@ -106,10 +106,10 @@ public class AndroidConfigurationForJson extends AndroidConfiguration {
                 }
             }
             // TODO: fix toolkit-box bug
-//            String libs = androidProject.getHome() + Constant.Symbol.SLASH_LEFT + "libs";
-//            if (FileUtil.isExist(libs)) {
-//                androidProject.getLibsDirectoryList().add(libs);
-//            }
+            String libs = androidProject.getHome() + Constant.Symbol.SLASH_LEFT + "libs";
+            if (FileUtil.isExist(libs)) {
+                androidProject.getLibsDirectoryList().add(libs);
+            }
             if (projectJsonObject.has("dependencies")) {
                 JsonArray dependenciesJsonArray = projectJsonObject.getJsonArray("dependencies");
                 int dependenciesLength = dependenciesJsonArray.length();
