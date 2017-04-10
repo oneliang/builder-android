@@ -15,7 +15,6 @@ import com.oneliang.util.json.JsonObject;
 
 public class AndroidConfigurationForJson extends AndroidConfiguration {
 
-    public static final String LINEAR_ALLOC_MAPPING = "linearAllocMapping.properties";
     private String projectJsonFile = null;
 
     private JsonObject jsonObject = null;
