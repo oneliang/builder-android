@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.oneliang.Constant;
 import com.oneliang.tools.builder.android.base.AndroidProject;
@@ -50,13 +51,13 @@ public class ProguardHandler extends AbstractAndroidHandler {
             }
             Map<String, String> jarMap = new HashMap<String, String>();
             for (AndroidProject androidProject : this.androidConfiguration.getAndroidProjectList()) {
-                List<String> jarList = androidProject.getDependJarList();
+                Set<String> jarSet = androidProject.getDependJarSet();
                 String inputAndroidProjectJar = androidProject.getOptimizedOriginalOutput() + "/" + androidProject.getName() + Constant.Symbol.DOT + Constant.File.JAR;
                 if (FileUtil.isExist(inputAndroidProjectJar)) {
                     String outputAndroidProjectJar = androidProject.getOptimizedProguardOutput() + "/" + androidProject.getName() + Constant.Symbol.DOT + Constant.File.JAR;
                     proguardJarPairList.add(new ProguardJarPair(inputAndroidProjectJar, outputAndroidProjectJar));
                 }
-                for (String jar : jarList) {
+                for (String jar : jarSet) {
                     File jarFile = new File(jar);
                     String jarFilename = jarFile.getName();
                     if (!jarMap.containsKey(jarFilename)) {

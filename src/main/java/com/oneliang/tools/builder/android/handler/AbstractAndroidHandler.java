@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.oneliang.Constant;
 import com.oneliang.tools.builder.android.base.Android;
@@ -121,9 +122,9 @@ public abstract class AbstractAndroidHandler extends AbstractJavaHandler {
             classesJarListAndLibraryList.add(projectClassesJar);
         }
 
-        List<String> jarList = androidProject.getDependJarList();
-        if (jarList != null && !jarList.isEmpty()) {
-            for (String jar : jarList) {
+        Set<String> jarSet = androidProject.getDependJarSet();
+        if (jarSet != null && !jarSet.isEmpty()) {
+            for (String jar : jarSet) {
                 // maybe same jar filename
                 String jarFilename = Generator.MD5File(jar) + Constant.Symbol.DOT + Constant.File.JAR;
                 String classesJar = (original ? androidProject.getOptimizedOriginalOutput() : androidProject.getOptimizedProguardOutput()) + "/" + jarFilename;

@@ -50,7 +50,7 @@ public class AutoDexHandler extends AbstractAndroidHandler {
         List<AndroidProject> androidProjectList = this.androidConfiguration.getAndroidProjectList();
         for (AndroidProject androidProject : androidProjectList) {
             classesList.add(androidProject.getClassesOutput());
-            classesList.addAll(androidProject.getDependJarList());
+            classesList.addAll(androidProject.getDependJarSet());
         }
         classesList.add(this.androidConfiguration.getPublicAndroidProject().getClassesOutput());
         return filterDuplicateFile(classesList);

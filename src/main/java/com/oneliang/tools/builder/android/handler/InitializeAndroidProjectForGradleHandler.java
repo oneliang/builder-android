@@ -54,12 +54,16 @@ public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHan
                 String dependencyFilename = dependencyFile.getName();
                 if (!dependencyFilename.endsWith(".aar")) {
                     if (dependencyFilename.endsWith(Constant.Symbol.DOT + Constant.File.JAR)) {
-                        androidProject.addDependJar(gradleDependency);
+                        String dependencyFullFilename = dependencyFile.getAbsolutePath();
+                        if (!FileUtil.isExist(dependencyFullFilename)) {
+                            continue;
+                        }
+                        androidProject.addDependJar(dependencyFullFilename);
                         if (androidProject.getCompileClasspathList() == null) {
                             androidProject.setCompileClasspathList(new ArrayList<String>());
                         }
                         List<String> compileClasspathList = androidProject.getCompileClasspathList();
-                        compileClasspathList.add(gradleDependency);
+                        compileClasspathList.add(dependencyFullFilename);
                     }
                     continue;
                 }
@@ -210,7 +214,7 @@ public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHan
             }
         };
         this.dealWithCache(cacheOption);
-        
+
         if (FileUtil.isExist(publicRDotTxt)) {
             androidConfiguration.setApkPatchInputRTxt(publicRDotTxt);
         }

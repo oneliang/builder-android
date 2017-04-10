@@ -1,7 +1,7 @@
 package com.oneliang.tools.builder.android.handler;
 
 import java.io.File;
-import java.util.List;
+import java.util.Set;
 
 import com.oneliang.Constant;
 import com.oneliang.tools.builder.base.BuilderUtil;
@@ -31,8 +31,8 @@ public class AfterCompileAndroidProjectHandler extends AndroidProjectHandler {
             }
         }
         BuilderUtil.jar(androidProjectJar, androidProject.getClassesOutput());
-        List<String> jarList = androidProject.getDependJarList();
-        for (String jar : jarList) {
+        Set<String> jarSet = androidProject.getDependJarSet();
+        for (String jar : jarSet) {
             String jarFilename = Generator.MD5File(jar);
             String jarOutputFullFilename = jarOutput + Constant.Symbol.SLASH_LEFT + jarFilename + Constant.Symbol.DOT + Constant.File.JAR;
             FileUtil.copyFile(jar, jarOutputFullFilename, FileUtil.FileCopyType.FILE_TO_FILE);
