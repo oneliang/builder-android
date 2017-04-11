@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import com.oneliang.Constant;
 import com.oneliang.tools.builder.base.Project;
 import com.oneliang.tools.builder.java.base.Java;
+import com.oneliang.util.common.StringUtil;
 import com.oneliang.util.file.FileUtil;
 import com.oneliang.util.json.JsonArray;
 import com.oneliang.util.json.JsonObject;
@@ -27,7 +28,9 @@ public class AndroidConfigurationForJson extends AndroidConfiguration {
         this.setJarKeyPassword(this.jsonObject.getString("keyPassword"));
         this.setJarKeystore(this.jsonObject.getString("storeFile"));
         this.setJarStorePassword(this.jsonObject.getString("storePassword"));
-        this.setBuildOutput(new File(this.jsonObject.getString("buildDirectory"), "builder-gen").getAbsolutePath());
+        if (StringUtil.isBlank(this.getBuildOutput())) {
+            this.setBuildOutput(new File(this.jsonObject.getString("buildDirectory"), "builder-gen").getAbsolutePath());
+        }
         this.setProjectMain(this.jsonObject.getString("projectMain"));
         this.setProjectWorkspace(this.jsonObject.getString("projectWorkspace"));
         this.setPackageName(this.jsonObject.getString("packageName"));
