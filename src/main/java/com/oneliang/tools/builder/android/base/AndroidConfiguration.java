@@ -153,7 +153,7 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
             if (this.builderConfiguration.getEnvironmentMap().containsKey(Environment.ANDROID_HOME)) {
                 this.androidSdk = this.builderConfiguration.getEnvironmentMap().get(Environment.ANDROID_HOME);
             } else {
-                throw new ConfigurationException("Need to configurate " + Environment.ANDROID_HOME + " or set the android.sdk in build properties");
+                throw new ConfigurationException("Need to configurate " + Environment.ANDROID_HOME + " or set the androidSdk in build xml");
             }
         } else {
             this.androidSdk = this.androidSdk.trim();
