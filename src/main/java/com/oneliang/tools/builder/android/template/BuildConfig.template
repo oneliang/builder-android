@@ -3,4 +3,5 @@ package #PACKAGE#;
 
 public final class BuildConfig {
     public final static boolean DEBUG = #DEBUG#;
+#OTHER_CONTENT#
 }

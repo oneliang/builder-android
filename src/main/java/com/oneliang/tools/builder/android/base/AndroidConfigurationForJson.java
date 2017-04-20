@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.oneliang.Constant;
+import com.oneliang.tools.builder.android.base.AndroidProjectForGradle.BuildConfig;
 import com.oneliang.tools.builder.base.Project;
 import com.oneliang.tools.builder.java.base.Java;
 import com.oneliang.util.common.StringUtil;
@@ -159,6 +160,21 @@ public class AndroidConfigurationForJson extends AndroidConfiguration {
                     onlyCompileClasspathList.add(new File(onlyCompile).getAbsolutePath());
                 }
                 androidProject.setOnlyCompileClasspathList(onlyCompileClasspathList);
+            }
+
+            if (projectJsonObject.has("buildConfig")) {
+                JsonArray buildConfigJsonArray = projectJsonObject.getJsonArray("buildConfig");
+                int length = buildConfigJsonArray.length();
+                List<BuildConfig> buildConfigList = new ArrayList<BuildConfig>();
+                for (int i = 0; i < length; i++) {
+                    JsonObject buildConfigJsonObject = buildConfigJsonArray.getJsonObject(i);
+                    String type = buildConfigJsonObject.getString("type");
+                    String name = buildConfigJsonObject.getString("name");
+                    String value = buildConfigJsonObject.getString("value");
+                    BuildConfig buildConfig = new BuildConfig(type, name, value);
+                    buildConfigList.add(buildConfig);
+                }
+                androidProject.setBuildConfigList(buildConfigList);
             }
 
             androidProject.setCompileTarget(this.compileTarget);
