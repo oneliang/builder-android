@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import com.oneliang.Constant;
 import com.oneliang.tools.builder.android.base.AndroidProjectForGradle.BuildConfig;
+import com.oneliang.tools.builder.base.KeyValue;
 import com.oneliang.tools.builder.base.Project;
 import com.oneliang.tools.builder.java.base.Java;
 import com.oneliang.util.common.StringUtil;
@@ -17,6 +18,7 @@ import com.oneliang.util.json.JsonObject;
 
 public class AndroidConfigurationForJson extends AndroidConfiguration {
 
+    public static final String TEMPORARY_DATA_MANIFEST_REPLACE_KEYWORD_LIST = "manifestReplaceKeywordList";
     private String projectJsonFile = null;
 
     private JsonObject jsonObject = null;
@@ -50,6 +52,25 @@ public class AndroidConfigurationForJson extends AndroidConfiguration {
         String androidBuildToolsVersion = jsonObject.getString("buildToolsVersion");
         this.android = new Android(androidSdk, androidBuildToolsVersion);
         this.compileTarget = jsonObject.getString("compileTarget");
+        // all projects
+        this.parseAllProject();
+        // manifest
+        this.parseManifest();
+        Iterator<Entry<String, Project>> iterator = projectMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            logger.info(iterator.next().getValue());
+        }
+    }
+
+    protected void initializeAllProject() {
+        this.initializeAllProjectFromJson();
+        super.initializeAllProject();
+    }
+
+    /**
+     * parse all project
+     */
+    private void parseAllProject() {
         JsonArray projectsJsonArray = jsonObject.getJsonArray("projects");
         int projectsLength = projectsJsonArray.length();
         for (int index = 0; index < projectsLength; index++) {
@@ -186,15 +207,34 @@ public class AndroidConfigurationForJson extends AndroidConfiguration {
 
             this.addProject(androidProject);
         }
-        Iterator<Entry<String, Project>> iterator = projectMap.entrySet().iterator();
-        while (iterator.hasNext()) {
-            logger.info(iterator.next().getValue());
-        }
     }
 
-    protected void initializeAllProject() {
-        this.initializeAllProjectFromJson();
-        super.initializeAllProject();
+    /**
+     * parse manifest
+     */
+    private void parseManifest() {
+        if (this.jsonObject.has("manifest")) {
+            JsonObject manifestJsonObject = this.jsonObject.getJsonObject("manifest");
+            if (manifestJsonObject.has("replaceKeyword")) {
+                List<KeyValue<String, String>> keyValueList = new ArrayList<KeyValue<String, String>>();
+                JsonArray replaceKeywordJsonArray = manifestJsonObject.getJsonArray("replaceKeyword");
+                int length = replaceKeywordJsonArray.length();
+                for (int i = 0; i < length; i++) {
+                    JsonObject replaceKeywordJsonObject = replaceKeywordJsonArray.getJsonObject(i);
+                    if (!replaceKeywordJsonObject.has("key") || !replaceKeywordJsonObject.has("value")) {
+                        continue;
+                    }
+                    String key = replaceKeywordJsonObject.getString("key");
+                    String value = replaceKeywordJsonObject.getString("value");
+                    KeyValue<String, String> keyValue = new KeyValue<String, String>(key, value);
+                    keyValueList.add(keyValue);
+                }
+                temporaryDataMap.put(TEMPORARY_DATA_MANIFEST_REPLACE_KEYWORD_LIST, keyValueList);
+            }
+            if (manifestJsonObject.has("metadata")) {
+
+            }
+        }
     }
 
     /**
