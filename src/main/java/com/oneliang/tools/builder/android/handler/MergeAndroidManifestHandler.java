@@ -37,7 +37,7 @@ public class MergeAndroidManifestHandler extends AbstractAndroidHandler {
         logger.info("all android manifest size:" + allAndroidManifestList.size());
         String androidManifestOutput = this.androidConfiguration.getPublicAndroidProject().getAndroidManifestOutput();
         FileUtil.createFile(androidManifestOutput);
-        BuilderUtil.mergeAndroidManifest(this.androidConfiguration.getPackageName(), this.androidConfiguration.getMinSdkVersion(), this.androidConfiguration.getTargetSdkVersion(), allAndroidManifestList, androidManifestOutput, true);// this.androidConfiguration.isApkDebug());
+        BuilderUtil.mergeAndroidManifest(this.androidConfiguration.getPackageName(), this.androidConfiguration.getMinSdkVersion(), this.androidConfiguration.getTargetSdkVersion(), allAndroidManifestList, androidManifestOutput, this.androidConfiguration.isApkDebug());
         return true;
     }
 }
