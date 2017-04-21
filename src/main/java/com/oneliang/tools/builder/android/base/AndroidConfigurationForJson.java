@@ -51,8 +51,8 @@ public class AndroidConfigurationForJson extends AndroidConfiguration {
         this.android = new Android(androidSdk, androidBuildToolsVersion);
         this.compileTarget = jsonObject.getString("compileTarget");
         JsonArray projectsJsonArray = jsonObject.getJsonArray("projects");
-        int modulesLength = projectsJsonArray.length();
-        for (int index = 0; index < modulesLength; index++) {
+        int projectsLength = projectsJsonArray.length();
+        for (int index = 0; index < projectsLength; index++) {
             JsonObject projectJsonObject = projectsJsonArray.getJsonObject(index);
             String projectName = projectJsonObject.getString("name");
             projectName = projectName.replace(Constant.Symbol.SLASH_RIGHT, Constant.Symbol.SLASH_LEFT);
