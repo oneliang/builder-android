@@ -21,6 +21,9 @@ import com.oneliang.util.file.FileUtil;
 public class GeneratePublicResourceHandler extends AbstractAndroidHandler {
 
     public boolean handle() {
+        if (this.androidConfiguration.isAllResourceFileHasNotChanged()) {
+            return true;
+        }
         List<AndroidProject> androidProjectList = this.androidConfiguration.getAndroidProjectList();
         List<String> originalResourceDirectoryList = this.androidConfiguration.findDirectoryOfAndroidProjectList(androidProjectList, DirectoryType.RES);
         originalResourceDirectoryList = filterDuplicateFile(originalResourceDirectoryList);

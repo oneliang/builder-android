@@ -46,20 +46,20 @@ public abstract class AbstractAndroidHandler extends AbstractJavaHandler {
     }
 
     /**
-     * is all compile file has cache
+     * is all compile file has not changed
      * 
      * @param androidProjectList
      * @return boolean
      */
     protected final boolean isAllCompileFileHasCache(List<AndroidProject> androidProjectList) {
-        boolean allCompileFileHasCache = true;
+        boolean allCompileFileHasNotChanged = true;
         for (AndroidProject androidProject : androidProjectList) {
-            if (!androidProject.isAllCompileFileHasCache()) {
-                allCompileFileHasCache = false;
+            if (!androidProject.isAllCompileFileHasNotChanged()) {
+                allCompileFileHasNotChanged = false;
                 break;
             }
         }
-        return allCompileFileHasCache;
+        return allCompileFileHasNotChanged;
     }
 
     /**

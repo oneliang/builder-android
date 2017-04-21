@@ -112,8 +112,8 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
 
     private Map<TaskNodeInsertBean, Entry<Integer, List<AndroidProject>>> taskNodeInsertBeanDexEntryMap = new HashMap<TaskNodeInsertBean, Entry<Integer, List<AndroidProject>>>();
     // temporary
-    private boolean allResourceFileHasCache = false;
-    private boolean allAssetsFileHasCache = false;
+    private boolean allResourceFileHasNotChanged = false;
+    private boolean allAssetsFileHasNotChanged = false;
 
     public static class Environment {
         public static final String ANDROID_HOME = "ANDROID_HOME";
@@ -806,33 +806,33 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
     }
 
     /**
-     * @return the allResourceFileHasCache
+     * @return the allResourceFileHasNotChanged
      */
-    public boolean isAllResourceFileHasCache() {
-        return allResourceFileHasCache;
+    public boolean isAllResourceFileHasNotChanged() {
+        return allResourceFileHasNotChanged;
     }
 
     /**
-     * @param allResourceFileHasCache
-     *            the allResourceFileHasCache to set
+     * @param allResourceFileHasNotChanged
+     *            the allResourceFileHasNotChanged to set
      */
-    public void setAllResourceFileHasCache(boolean allResourceFileHasCache) {
-        this.allResourceFileHasCache = allResourceFileHasCache;
+    public void setAllResourceFileHasNotChanged(boolean allResourceFileHasNotChanged) {
+        this.allResourceFileHasNotChanged = allResourceFileHasNotChanged;
     }
 
     /**
-     * @return the allAssetsFileHasCache
+     * @return the allAssetsFileHasNotChanged
      */
-    public boolean isAllAssetsFileHasCache() {
-        return allAssetsFileHasCache;
+    public boolean isAllAssetsFileHasNotChanged() {
+        return allAssetsFileHasNotChanged;
     }
 
     /**
-     * @param allAssetsFileHasCache
-     *            the allAssetsFileHasCache to set
+     * @param allAssetsFileHasNotChanged
+     *            the allAssetsFileHasNotChanged to set
      */
-    public void setAllAssetsFileHasCache(boolean allAssetsFileHasCache) {
-        this.allAssetsFileHasCache = allAssetsFileHasCache;
+    public void setAllAssetsFileHasNotChanged(boolean allAssetsFileHasNotChanged) {
+        this.allAssetsFileHasNotChanged = allAssetsFileHasNotChanged;
     }
 
     /**

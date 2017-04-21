@@ -40,7 +40,7 @@ public class PackageResourceHandler extends AbstractAndroidHandler {
                         FileUtil.copyFile(from, to, FileUtil.FileCopyType.FILE_TO_FILE);
                     }
                 } else {
-                    androidConfiguration.setAllAssetsFileHasCache(true);
+                    androidConfiguration.setAllAssetsFileHasNotChanged(true);
                 }
                 return true;
             }
@@ -77,7 +77,7 @@ public class PackageResourceHandler extends AbstractAndroidHandler {
                         saveCache = true;
                     }
                 } else {
-                    androidConfiguration.setAllResourceFileHasCache(true);
+                    androidConfiguration.setAllResourceFileHasNotChanged(true);
                 }
                 return saveCache;
             }

@@ -91,7 +91,7 @@ public class AndroidProject extends JavaProject {
     private String autoDexAllOriginalClassesJar = null;
 
     // use in building
-    private boolean allCompileFileHasCache = false;
+    private boolean allCompileFileHasNotChanged = false;
     private Map<RType, Set<RDotTxtEntry>> rTypeResourceMap = null;
     private List<String> thisTimeClassFileList = null;
 
@@ -337,18 +337,18 @@ public class AndroidProject extends JavaProject {
     }
 
     /**
-     * @return the allCompileFileHasCache
+     * @return the allCompileFileHasNotChanged
      */
-    public boolean isAllCompileFileHasCache() {
-        return allCompileFileHasCache;
+    public boolean isAllCompileFileHasNotChanged() {
+        return allCompileFileHasNotChanged;
     }
 
     /**
-     * @param allCompileFileHasCache
-     *            the allCompileFileHasCache to set
+     * @param allCompileFileHasNotChanged
+     *            the allCompileFileHasNotChanged to set
      */
-    public void setAllCompileFileHasCache(boolean allCompileFileHasCache) {
-        this.allCompileFileHasCache = allCompileFileHasCache;
+    public void setAllCompileFileHasNotChanged(boolean allCompileFileHasNotChanged) {
+        this.allCompileFileHasNotChanged = allCompileFileHasNotChanged;
     }
 
     /**

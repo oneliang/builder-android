@@ -7,7 +7,7 @@ import com.oneliang.tools.builder.base.BuilderUtil;
 public class ZipAlignApkHandler extends AbstractAndroidHandler {
 
 	public boolean handle() {
-		if(!this.androidConfiguration.isAllAssetsFileHasCache()||!isAllCompileFileHasCache(this.androidConfiguration.getAndroidProjectList())){
+		if(!this.androidConfiguration.isAllAssetsFileHasNotChanged()||!isAllCompileFileHasCache(this.androidConfiguration.getAndroidProjectList())){
 			String inputApkFullFilename=this.androidConfiguration.getMainAndroidProject().getApkFullFilename();
 			String outputApkFullFilename=this.androidConfiguration.getMainAndroidProject().getZipAlignApkFullFilename();
 			new File(outputApkFullFilename).delete();

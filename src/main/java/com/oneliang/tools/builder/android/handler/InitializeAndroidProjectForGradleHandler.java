@@ -209,6 +209,8 @@ public class InitializeAndroidProjectForGradleHandler extends AbstractAndroidHan
                             saveCache = true;
                         }
                     }
+                }else{
+                    androidConfiguration.setAllResourceFileHasNotChanged(true);
                 }
                 return saveCache;
             }

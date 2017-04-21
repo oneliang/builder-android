@@ -46,7 +46,7 @@ public class GeneratePublicRFileHandler extends AbstractAndroidHandler {
                         }
                     }
                 } else {
-                    androidConfiguration.setAllResourceFileHasCache(true);
+                    androidConfiguration.setAllResourceFileHasNotChanged(true);
                     result = true;
                 }
                 if (result) {

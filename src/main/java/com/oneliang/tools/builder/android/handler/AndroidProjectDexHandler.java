@@ -9,7 +9,7 @@ import com.oneliang.util.file.FileUtil;
 public class AndroidProjectDexHandler extends AndroidProjectHandler {
 
     public boolean handle() {
-        boolean isAllCompileFileHasCache = androidProject.isAllCompileFileHasCache();
+        boolean isAllCompileFileHasCache = androidProject.isAllCompileFileHasNotChanged();
         if (!isAllCompileFileHasCache || !this.androidConfiguration.isApkDebug()) {
             String dexOutputDirectory = androidProject.getDexOutput();
             FileUtil.createDirectory(dexOutputDirectory);
