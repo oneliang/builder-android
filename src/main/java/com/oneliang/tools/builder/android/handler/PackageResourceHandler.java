@@ -16,6 +16,8 @@ import com.oneliang.util.file.FileUtil;
 
 public class PackageResourceHandler extends AbstractAndroidHandler {
 
+    private boolean packageSuccess = false;
+
     public boolean handle() {
         List<String> maybeDuplicateAssetsDirectoryList = this.androidConfiguration.findDirectoryOfAndroidProjectList(this.androidConfiguration.getAndroidProjectList(), AndroidProject.DirectoryType.ASSETS);
         final List<String> assetsDirectoryList = this.filterDuplicateFile(maybeDuplicateAssetsDirectoryList);
@@ -62,11 +64,11 @@ public class PackageResourceHandler extends AbstractAndroidHandler {
                     FileUtil.createDirectory(mergeResourceOutput);
                     String resourceFullFilename = mergeResourceOutput + "/" + AndroidProject.RESOURCE_FILE;
 
-                    //add ids.xml and public.xml
+                    // add ids.xml and public.xml
                     if (FileUtil.isExist(androidConfiguration.getPublicRAndroidProject().getResourceOutput())) {
                         resourceDirectoryList.add(androidConfiguration.getPublicRAndroidProject().getResourceOutput());
                     }
-                    
+
                     int result = BuilderUtil.executeAndroidAaptToPackageResource(android.getAaptExecutor(), androidManifest, resourceDirectoryList, assetsList, Arrays.asList(androidConfiguration.getMainAndroidApiJar()), resourceFullFilename, androidConfiguration.isApkDebug());
                     logger.info("Aapt package resource result code:" + result);
                     // unzip resources.ap_
@@ -75,6 +77,7 @@ public class PackageResourceHandler extends AbstractAndroidHandler {
                     }
                     if (result == 0) {
                         saveCache = true;
+                        packageSuccess = true;
                     }
                 } else {
                     androidConfiguration.setAllResourceFileHasNotChanged(true);
@@ -83,7 +86,7 @@ public class PackageResourceHandler extends AbstractAndroidHandler {
             }
         };
         this.dealWithCache(cacheOption);
-        return true;
+        return packageSuccess;
     }
 
 }
