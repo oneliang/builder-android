@@ -32,6 +32,7 @@ public abstract class AbstractAndroidHandler extends AbstractJavaHandler {
     public static final String CACHE_ASSETS_FILE = "assetsFile";
     public static final String CACHE_RESOURCE_ITEM = "resourceItem";
     public static final String CACHE_SO_FILE = "soFile";
+    public static final String CACHE_DEX_FILE = "dexFile";
 
     protected AndroidConfiguration androidConfiguration = null;
     protected Android android = null;

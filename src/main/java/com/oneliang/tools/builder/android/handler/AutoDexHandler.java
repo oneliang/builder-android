@@ -1,13 +1,15 @@
 package com.oneliang.tools.builder.android.handler;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import com.oneliang.Constant;
 import com.oneliang.tools.autodex.AutoDexUtil;
 import com.oneliang.tools.builder.android.base.AndroidProject;
 import com.oneliang.tools.builder.base.BuildException;
+import com.oneliang.tools.builder.base.ChangedFile;
 import com.oneliang.util.file.FileUtil;
 
 public class AutoDexHandler extends AbstractAndroidHandler {
@@ -30,16 +32,28 @@ public class AutoDexHandler extends AbstractAndroidHandler {
             AutoDexUtil.autoDex(option);
 
             final String prepareOutput = this.androidConfiguration.getMainAndroidProject().getPrepareOutput();
-            FileUtil.MatchOption matchOption = new FileUtil.MatchOption(autoDexOutput);
-            matchOption.fileSuffix = Constant.Symbol.DOT + Constant.File.DEX;
-            matchOption.deep = false;
-            matchOption.processor = new FileUtil.MatchOption.Processor() {
-                public String onMatch(File file) {
-                    FileUtil.copyFile(file.getAbsolutePath(), prepareOutput, FileUtil.FileCopyType.FILE_TO_PATH);
-                    return null;
+            String cacheFullFilename = this.androidConfiguration.getMainAndroidProject().getCacheOutput()+Constant.Symbol.SLASH_LEFT+CACHE_DEX_FILE;
+            CacheOption cacheOption = new CacheOption(cacheFullFilename, Arrays.asList(autoDexOutput));
+            cacheOption.fileSuffix = Constant.Symbol.DOT + Constant.File.DEX;
+            cacheOption.changedFileProcessor = new CacheOption.ChangedFileProcessor() {
+                public boolean process(Iterable<ChangedFile> changedFileIterable) {
+                    boolean saveCache = false;
+                    if (changedFileIterable != null && changedFileIterable.iterator().hasNext()) {
+                        Iterator<ChangedFile> changedFileIterator = changedFileIterable.iterator();
+                        while (changedFileIterator.hasNext()) {
+                            ChangedFile changedFile = changedFileIterator.next();
+                            if (changedFile.status.equals(ChangedFile.Status.DELETED)) {
+                                continue;
+                            }
+                            FileUtil.copyFile(changedFile.fullFilename, prepareOutput, FileUtil.FileCopyType.FILE_TO_PATH);
+                        }
+                        saveCache = true;
+                        androidConfiguration.getMainAndroidProject().setAllCompileFileHasNotChanged(false);
+                    }
+                    return saveCache;
                 }
             };
-            FileUtil.findMatchFile(matchOption);
+            this.dealWithCache(cacheOption);
         } catch (Exception e) {
             throw new BuildException(e);
         }

@@ -38,6 +38,7 @@ public class GeneratePublicRDotTxtHandler extends AbstractAndroidHandler {
                     }
                 } else {
                     androidConfiguration.setAllResourceFileHasNotChanged(true);
+                    generateRSuccess = true;
                 }
                 return saveCache;
             }

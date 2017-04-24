@@ -11,8 +11,8 @@ public class GenerateApkHandler extends AbstractAndroidHandler {
         FileUtil.createDirectory(this.androidConfiguration.getMainAndroidProject().getPrepareLibOutput());
         boolean allAssetsFileHasCache = this.androidConfiguration.isAllAssetsFileHasNotChanged();
         boolean allCompileFileHasCache = isAllCompileFileHasCache(this.androidConfiguration.getAndroidProjectList());
+        logger.info("All assets file has not changed:" + allAssetsFileHasCache + ",all compile file has cache:" + allCompileFileHasCache);
         if (!allAssetsFileHasCache || !allCompileFileHasCache) {
-            logger.info("All assets file has cache:" + allAssetsFileHasCache + ",all compile file has cache:" + allCompileFileHasCache);
             // copy all dex to publish prepare
             FileUtil.copyFile(this.androidConfiguration.getMainAndroidProject().getMergeDexOutput(), this.androidConfiguration.getMainAndroidProject().getPrepareOutput(), FileUtil.FileCopyType.PATH_TO_PATH);
             String apkOutputFullFilename = this.androidConfiguration.getMainAndroidProject().getUnsignedApkFullFilename();
