@@ -53,9 +53,10 @@ public class ProguardHandler extends AbstractAndroidHandler {
             Map<String, String> jarMap = new HashMap<String, String>();
             for (AndroidProject androidProject : this.androidConfiguration.getAndroidProjectList()) {
                 Set<String> jarSet = androidProject.getDependJarSet();
-                String inputAndroidProjectJar = androidProject.getOptimizedOriginalOutput() + "/" + androidProject.getName() + Constant.Symbol.DOT + Constant.File.JAR;
+                String optimizeProjectName = optimizeName(androidProject.getName());
+                String inputAndroidProjectJar = androidProject.getOptimizedOriginalOutput() + "/" + optimizeProjectName + Constant.Symbol.DOT + Constant.File.JAR;
                 if (FileUtil.isExist(inputAndroidProjectJar)) {
-                    String outputAndroidProjectJar = androidProject.getOptimizedProguardOutput() + "/" + androidProject.getName() + Constant.Symbol.DOT + Constant.File.JAR;
+                    String outputAndroidProjectJar = androidProject.getOptimizedProguardOutput() + "/" + optimizeProjectName + Constant.Symbol.DOT + Constant.File.JAR;
                     proguardJarPairList.add(new ProguardJarPair(inputAndroidProjectJar, outputAndroidProjectJar));
                 }
                 for (String jar : jarSet) {
