@@ -17,18 +17,18 @@ public class AfterCompileAndroidProjectHandler extends AndroidProjectHandler {
         FileUtil.createDirectory(jarOutput);
         // is not android aapt generate r file,delete R$*.class
         if (!this.androidConfiguration.isAaptGenerateRFile()) {
-            String packageDirectory = androidProject.getClassesOutput() + Constant.Symbol.SLASH_LEFT + androidProject.getPackageName().replace(Constant.Symbol.DOT, Constant.Symbol.SLASH_LEFT);
-            File[] packageDirectoryFileArray = new File(packageDirectory).listFiles();
-            if (packageDirectoryFileArray != null) {
-                for (File file : packageDirectoryFileArray) {
-                    if (file.isFile()) {
-                        String filename = file.getName();
-                        if (StringUtil.isMatchPattern(filename, "R\\$*.class") || StringUtil.isMatchPattern(filename, "R.class")) {
-                            file.delete();
-                        }
-                    }
-                }
-            }
+//            String packageDirectory = androidProject.getClassesOutput() + Constant.Symbol.SLASH_LEFT + androidProject.getPackageName().replace(Constant.Symbol.DOT, Constant.Symbol.SLASH_LEFT);
+//            File[] packageDirectoryFileArray = new File(packageDirectory).listFiles();
+//            if (packageDirectoryFileArray != null) {
+//                for (File file : packageDirectoryFileArray) {
+//                    if (file.isFile()) {
+//                        String filename = file.getName();
+//                        if (StringUtil.isMatchPattern(filename, "R\\$*.class") || StringUtil.isMatchPattern(filename, "R.class")) {
+//                            file.delete();
+//                        }
+//                    }
+//                }
+//            }
         }
         BuilderUtil.jar(androidProjectJar, androidProject.getClassesOutput());
         Set<String> jarSet = androidProject.getDependJarSet();

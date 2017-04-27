@@ -13,6 +13,7 @@ import com.oneliang.tools.builder.android.base.AndroidProject;
 import com.oneliang.tools.builder.android.base.PublicAndroidProject;
 import com.oneliang.tools.builder.base.BuilderUtil;
 import com.oneliang.tools.builder.base.BuilderUtil.ProguardJarPair;
+import com.oneliang.util.common.Generator;
 import com.oneliang.util.common.StringUtil;
 import com.oneliang.util.file.FileUtil;
 
@@ -59,11 +60,12 @@ public class ProguardHandler extends AbstractAndroidHandler {
                 }
                 for (String jar : jarSet) {
                     File jarFile = new File(jar);
-                    String jarFilename = jarFile.getName();
+                    String jarFilename = Generator.MD5File(jarFile.getAbsolutePath()) + Constant.Symbol.DOT + Constant.File.JAR;
                     if (!jarMap.containsKey(jarFilename)) {
                         String inputJar = androidProject.getOptimizedOriginalOutput() + "/" + jarFilename;
                         String outputJar = androidProject.getOptimizedProguardOutput() + "/" + jarFilename;
                         proguardJarPairList.add(new ProguardJarPair(inputJar, outputJar));
+                        jarMap.put(jarFilename, jarFilename);
                     }
                 }
             }
