@@ -88,7 +88,6 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
     protected String apkPatchInputRTxt = null;
     protected String apkPatchBaseApk = null;
     protected String apkPatchResourceItemMapping = null;
-    protected String proguardClasspath = null;
     protected String androidProjectDexTaskNodeInsertName = null;
     protected String multiAndroidProjectDexTaskNodeInsertName = null;
     protected String packageName = null;
@@ -180,7 +179,6 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
         logger.info(MAP_KEY_PACKAGE_NAME + Constant.Symbol.COLON + this.packageName);
         logger.info(MAP_KEY_MIN_SDK_VERSION + Constant.Symbol.COLON + this.minSdkVersion);
         logger.info(MAP_KEY_TARGET_SDK_VERSION + Constant.Symbol.COLON + this.targetSdkVersion);
-        logger.info(MAP_KEY_PROGUARD_CLASSPATH + Constant.Symbol.COLON + this.proguardClasspath);
     }
 
     protected void initializeAllProject() {
@@ -896,20 +894,6 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
         this.apkPatchResourceItemMapping = apkPatchResourceItemMapping;
     }
 
-    /**
-     * @return the proguardClasspath
-     */
-    public String getProguardClasspath() {
-        return proguardClasspath;
-    }
-
-    /**
-     * @param proguardClasspath
-     *            the proguardClasspath to set
-     */
-    public void setProguardClasspath(String proguardClasspath) {
-        this.proguardClasspath = proguardClasspath;
-    }
 
     /**
      * @return the patchAndroidProject
