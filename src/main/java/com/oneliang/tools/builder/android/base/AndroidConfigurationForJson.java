@@ -183,6 +183,11 @@ public class AndroidConfigurationForJson extends AndroidConfiguration {
                 androidProject.setOnlyCompileClasspathList(onlyCompileClasspathList);
             }
 
+            if (projectJsonObject.has("provided")) {
+                boolean provided = projectJsonObject.getBoolean("provided");
+                androidProject.setProvided(provided);
+            }
+
             if (projectJsonObject.has("buildConfig")) {
                 JsonArray buildConfigJsonArray = projectJsonObject.getJsonArray("buildConfig");
                 int length = buildConfigJsonArray.length();

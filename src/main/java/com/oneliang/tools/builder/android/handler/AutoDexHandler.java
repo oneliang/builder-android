@@ -63,6 +63,9 @@ public class AutoDexHandler extends AbstractAndroidHandler {
         List<String> classesList = new ArrayList<String>();
         List<AndroidProject> androidProjectList = this.androidConfiguration.getAndroidProjectList();
         for (AndroidProject androidProject : androidProjectList) {
+            if(androidProject.isProvided()){
+                continue;
+            }
             classesList.add(androidProject.getClassesOutput());
             classesList.addAll(androidProject.getDependJarSet());
         }

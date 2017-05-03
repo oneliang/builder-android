@@ -58,6 +58,7 @@ public class AndroidProject extends JavaProject {
     private int dexId = 0;
     private String compileTarget = null;
     private boolean debug = false;
+    private boolean provided = false;
     // project home directory
     private List<String> resourceDirectoryList = new ArrayList<String>();
     private String gen = null;
@@ -528,5 +529,19 @@ public class AndroidProject extends JavaProject {
      */
     public String getMergeResourceOutput() {
         return mergeResourceOutput;
+    }
+
+    /**
+     * @return the provided
+     */
+    public boolean isProvided() {
+        return provided;
+    }
+
+    /**
+     * @param provided the provided to set
+     */
+    public void setProvided(boolean provided) {
+        this.provided = provided;
     }
 }
