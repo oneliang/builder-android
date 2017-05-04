@@ -1,6 +1,7 @@
 package com.oneliang.tools.builder.android.handler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.oneliang.Constant;
@@ -8,6 +9,7 @@ import com.oneliang.tools.builder.android.base.PublicAndroidProject;
 import com.oneliang.tools.builder.base.BuilderUtil;
 import com.oneliang.tools.builder.base.CacheHandler.CacheOption.ChangedFileProcessor;
 import com.oneliang.tools.builder.base.ChangedFile;
+import com.oneliang.tools.builder.base.KeyValue;
 import com.oneliang.util.file.FileUtil;
 
 public class CompilePublicFileHandler extends AbstractAndroidHandler {
@@ -34,8 +36,11 @@ public class CompilePublicFileHandler extends AbstractAndroidHandler {
                     classpathList.add(android.getAnnotationJar());
                     String classesOutputDirectory = androidConfiguration.getPublicAndroidProject().getClassesOutput();
                     FileUtil.createDirectory(classesOutputDirectory);
-                    int result = BuilderUtil.javac(classpathList, sourceList, classesOutputDirectory, androidConfiguration.isApkDebug());
-//                    int result = BuilderUtil.executeJavac(java.getJavacExecutor(), classpathList, sourceList, classesOutputDirectory, androidConfiguration.isApkDebug());
+                    int result = BuilderUtil.javac(sourceList, classesOutputDirectory, androidConfiguration.isApkDebug(), classpathList, null, null, Arrays.asList(new KeyValue<String, String>("-source", "1.7"), new KeyValue<String, String>("-target", "1.7")));
+                    // int result =
+                    // BuilderUtil.executeJavac(java.getJavacExecutor(),
+                    // classpathList, sourceList, classesOutputDirectory,
+                    // androidConfiguration.isApkDebug());
                     if (result != 0) {
                         return false;
                     }

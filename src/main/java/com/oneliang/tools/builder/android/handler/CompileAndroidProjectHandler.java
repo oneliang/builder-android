@@ -1,6 +1,7 @@
 package com.oneliang.tools.builder.android.handler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.oneliang.Constant;
@@ -9,6 +10,7 @@ import com.oneliang.tools.builder.base.BuilderUtil;
 import com.oneliang.tools.builder.base.Cache;
 import com.oneliang.tools.builder.base.CacheHandler.CacheOption.ChangedFileProcessor;
 import com.oneliang.tools.builder.base.ChangedFile;
+import com.oneliang.tools.builder.base.KeyValue;
 import com.oneliang.util.common.StringUtil;
 import com.oneliang.util.file.FileUtil;
 
@@ -60,7 +62,10 @@ public class CompileAndroidProjectHandler extends AndroidProjectHandler {
                     }
                     int javacResult = 0;
                     try {
-                        javacResult = BuilderUtil.javac(compileClasspathList, togetherSourceList, classesOutput, androidConfiguration.isApkDebug(), androidProject.getCompileProcessorPathList());
+                        for (String compileClasspath : compileClasspathList) {
+                            logger.info(androidProject.getName() + "," + compileClasspath);
+                        }
+                        javacResult = BuilderUtil.javac(togetherSourceList, classesOutput, androidConfiguration.isApkDebug(), null, androidProject.getCompileProcessorPathList(), compileClasspathList, Arrays.asList(new KeyValue<String, String>("-source", "1.7"), new KeyValue<String, String>("-target", "1.7")));
                         // javacResult =
                         // BuilderUtil.executeJavac(java.getJavacExecutor(),
                         // compileClasspathList, togetherSourceList,
