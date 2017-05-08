@@ -44,7 +44,7 @@ public class GenerateAarRDotJavaHandler extends AbstractAndroidHandler {
                             Map<RType, Set<RDotTxtEntry>> allRTypeResourceMap = AaptUtil.collectResource(Arrays.asList(aarResOutput), finalRTypeResourceMap).getRTypeResourceMap();
                             String packageName = AndroidProject.parsePackageName(aarAndroidManifest);
                             String outputDirectory = androidConfiguration.getPublicAndroidProject().getGenOutput();
-                            AaptUtil.writeRJava(outputDirectory, packageName, allRTypeResourceMap, false);
+                            AaptUtil.writeRJava(outputDirectory, packageName, allRTypeResourceMap, !androidConfiguration.isApkDebug());
                             return true;
                         } else {
                             return false;

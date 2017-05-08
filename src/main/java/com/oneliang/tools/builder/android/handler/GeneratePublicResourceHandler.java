@@ -98,7 +98,7 @@ public class GeneratePublicResourceHandler extends AbstractAndroidHandler {
             for (String resourceDirectory : resourceDirectoryList) {
                 mergeRTypeResourceMap(allRTypeResourceMap, directoryRTypeResourceMap.get(resourceDirectory));
             }
-            AaptUtil.writeRJava(androidProject.getGenOutput(), androidProject.getPackageName(), allRTypeResourceMap, false);
+            AaptUtil.writeRJava(androidProject.getGenOutput(), androidProject.getPackageName(), allRTypeResourceMap, !androidConfiguration.isApkDebug());
         }
 
         // int

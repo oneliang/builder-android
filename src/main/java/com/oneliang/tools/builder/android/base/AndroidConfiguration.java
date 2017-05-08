@@ -83,6 +83,7 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
     protected int autoDexMethodLimit = 0xFFFF;// dex must less than 65536,55000
                                               // is more safer then 65535
     protected String autoDexMainDexOtherClasses = null;
+    protected String autoDexMainDexOtherClassesFile = null;
     protected boolean aaptGenerateRFile = true;
     protected String apkPatchInputAllClassesJar = null;
     protected String apkPatchInputRTxt = null;
@@ -128,6 +129,9 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
         } else {
             File file = new File(StringUtil.BLANK);
             this.buildOutput = file.getAbsolutePath() + "/builder-gen";
+        }
+        if (FileUtil.isExist(this.autoDexMainDexOtherClassesFile)) {
+            this.autoDexMainDexOtherClasses = FileUtil.readFileContentIgnoreLine(this.autoDexMainDexOtherClassesFile, Constant.Symbol.COMMA);
         }
         if (StringUtil.isNotBlank(this.autoDexMainDexOtherClasses)) {
             String[] classArray = this.autoDexMainDexOtherClasses.split(Constant.Symbol.COMMA);
@@ -943,5 +947,12 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
      */
     public void setTargetSdkVersion(int targetSdkVersion) {
         this.targetSdkVersion = targetSdkVersion;
+    }
+
+    /**
+     * @param autoDexMainDexOtherClassesFile the autoDexMainDexOtherClassesFile to set
+     */
+    public void setAutoDexMainDexOtherClassesFile(String autoDexMainDexOtherClassesFile) {
+        this.autoDexMainDexOtherClassesFile = autoDexMainDexOtherClassesFile;
     }
 }
