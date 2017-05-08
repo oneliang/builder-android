@@ -76,10 +76,11 @@ public class ProguardHandler extends AbstractAndroidHandler {
                         jarMap.put(jarFilename, jarFilename);
                     }
                 }
-//                List<String> onlyCompileClasspathList = androidProject.getOnlyCompileClasspathList();
-//                if (onlyCompileClasspathList != null) {
-//                    classpathList.addAll(onlyCompileClasspathList);
-//                }
+                // List<String> onlyCompileClasspathList =
+                // androidProject.getOnlyCompileClasspathList();
+                // if (onlyCompileClasspathList != null) {
+                // classpathList.addAll(onlyCompileClasspathList);
+                // }
             }
             List<String> proguardConfigList = null;
             if (this.androidConfiguration.isApkPreRelease()) {
@@ -89,7 +90,10 @@ public class ProguardHandler extends AbstractAndroidHandler {
             }
             classpathList = filterDuplicateFile(classpathList);
             for (String classpath : classpathList) {
-                logger.info("proguard classpath:"+classpath);
+                logger.info("proguard classpath:" + classpath);
+            }
+            for (String proguardConfig : proguardConfigList) {
+                logger.info("proguard cfg:" + proguardConfig);
             }
             BuilderUtil.proguard(proguardConfigList, proguardJarPairList, classpathList);
             // unzip all zip for auto dex

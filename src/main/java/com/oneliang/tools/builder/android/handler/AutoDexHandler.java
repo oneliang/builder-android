@@ -11,6 +11,7 @@ import com.oneliang.tools.builder.android.base.AndroidProject;
 import com.oneliang.tools.builder.base.BuildException;
 import com.oneliang.tools.builder.base.ChangedFile;
 import com.oneliang.util.file.FileUtil;
+import com.oneliang.util.file.FileUtil.MatchOption;
 
 public class AutoDexHandler extends AbstractAndroidHandler {
 
@@ -27,12 +28,12 @@ public class AutoDexHandler extends AbstractAndroidHandler {
             List<String> combinedClassList = this.getAllAndroidProjectClassesList();
             AutoDexUtil.Option option = new AutoDexUtil.Option(combinedClassList, androidManifestFullFilename, autoDexOutput, debug);
             option.minMainDex = true;
-            option.attachBaseContext = true;
+            option.attachBaseContext = debug;
             option.mainDexOtherClassList = this.androidConfiguration.getAutoDexMainDexOtherClassList();
             AutoDexUtil.autoDex(option);
 
             final String prepareOutput = this.androidConfiguration.getMainAndroidProject().getPrepareOutput();
-            String cacheFullFilename = this.androidConfiguration.getMainAndroidProject().getCacheOutput()+Constant.Symbol.SLASH_LEFT+CACHE_DEX_FILE;
+            String cacheFullFilename = this.androidConfiguration.getMainAndroidProject().getCacheOutput() + Constant.Symbol.SLASH_LEFT + CACHE_DEX_FILE;
             CacheOption cacheOption = new CacheOption(cacheFullFilename, Arrays.asList(autoDexOutput));
             cacheOption.fileSuffix = Constant.Symbol.DOT + Constant.File.DEX;
             cacheOption.changedFileProcessor = new CacheOption.ChangedFileProcessor() {
@@ -62,14 +63,28 @@ public class AutoDexHandler extends AbstractAndroidHandler {
     private List<String> getAllAndroidProjectClassesList() {
         List<String> classesList = new ArrayList<String>();
         List<AndroidProject> androidProjectList = this.androidConfiguration.getAndroidProjectList();
-        for (AndroidProject androidProject : androidProjectList) {
-            if(androidProject.isProvided()){
-                continue;
+        if (this.androidConfiguration.isApkDebug()) {
+            for (AndroidProject androidProject : androidProjectList) {
+                if (androidProject.isProvided()) {
+                    continue;
+                }
+                classesList.add(androidProject.getClassesOutput());
+                classesList.addAll(androidProject.getDependJarSet());
             }
-            classesList.add(androidProject.getClassesOutput());
-            classesList.addAll(androidProject.getDependJarSet());
+            classesList.add(this.androidConfiguration.getPublicAndroidProject().getClassesOutput());
+        } else {
+            for (AndroidProject androidProject : androidProjectList) {
+                if (androidProject.isProvided()) {
+                    continue;
+                }
+                MatchOption matchOption = new MatchOption(androidProject.getOptimizedProguardOutput());
+                matchOption.fileSuffix = Constant.Symbol.DOT + Constant.File.JAR;
+                classesList.addAll(FileUtil.findMatchFile(matchOption));
+            }
+            MatchOption matchOption = new MatchOption(this.androidConfiguration.getPublicAndroidProject().getOptimizedProguardOutput());
+            matchOption.fileSuffix = Constant.Symbol.DOT + Constant.File.JAR;
+            classesList.addAll(FileUtil.findMatchFile(matchOption));
         }
-        classesList.add(this.androidConfiguration.getPublicAndroidProject().getClassesOutput());
         return filterDuplicateFile(classesList);
     }
 }
