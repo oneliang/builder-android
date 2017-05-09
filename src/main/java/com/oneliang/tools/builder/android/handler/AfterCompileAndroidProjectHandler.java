@@ -12,6 +12,9 @@ import com.oneliang.util.file.FileUtil;
 public class AfterCompileAndroidProjectHandler extends AndroidProjectHandler {
 
     public boolean handle() {
+        if (this.androidProject.isAllCompileFileHasNotChanged()) {
+            return true;
+        }
         String jarOutput = this.androidConfiguration.isApkDebug() ? androidProject.getOptimizedProguardOutput() : androidProject.getOptimizedOriginalOutput();
         String androidProjectJar = jarOutput + "/" + optimizeName(this.androidProject.getName()) + Constant.Symbol.DOT + Constant.File.JAR;
         FileUtil.createDirectory(jarOutput);
