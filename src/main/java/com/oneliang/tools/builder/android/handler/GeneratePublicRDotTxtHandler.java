@@ -20,7 +20,7 @@ public class GeneratePublicRDotTxtHandler extends AbstractAndroidHandler {
     public boolean handle() {
         List<String> maybeDuplicateResourceDirectoryList = new ArrayList<String>(this.androidConfiguration.findDirectoryOfAndroidProjectList(this.androidConfiguration.getAndroidProjectList(), DirectoryType.RES));
         final List<String> resourceDirectoryList = this.filterDuplicateFile(maybeDuplicateResourceDirectoryList);
-        String publicOutput = this.androidConfiguration.getPublicAndroidProject().getOutputHome();
+        final String publicOutput = this.androidConfiguration.getPublicAndroidProject().getOutputHome();
         FileUtil.createDirectory(publicOutput);
         String resourceFileCacheFullFilename = this.androidConfiguration.getPublicAndroidProject().getCacheOutput() + "/" + GEN_R_CACHE;
         String publicRDotTxt = publicOutput + Constant.Symbol.SLASH_LEFT + PublicAndroidProject.R_TXT;
