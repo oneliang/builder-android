@@ -63,7 +63,7 @@ public class CompileAndroidProjectHandler extends AndroidProjectHandler {
                     int javacResult = 0;
                     try {
                         for (String compileClasspath : compileClasspathList) {
-                            logger.info(androidProject.getName() + "," + compileClasspath);
+                            logger.debug(androidProject.getName() + "," + compileClasspath);
                         }
                         javacResult = BuilderUtil.javac(togetherSourceList, classesOutput, androidConfiguration.isApkDebug(), null, androidProject.getCompileProcessorPathList(), compileClasspathList, Arrays.asList(new KeyValue<String, String>("-source", "1.7"), new KeyValue<String, String>("-target", "1.7")));
                         // javacResult =
