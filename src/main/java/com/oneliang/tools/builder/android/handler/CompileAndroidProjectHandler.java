@@ -65,7 +65,7 @@ public class CompileAndroidProjectHandler extends AndroidProjectHandler {
                         for (String compileClasspath : compileClasspathList) {
                             logger.debug(androidProject.getName() + "," + compileClasspath);
                         }
-                        javacResult = BuilderUtil.javac(togetherSourceList, classesOutput, androidConfiguration.isApkDebug(), null, androidProject.getCompileProcessorPathList(), compileClasspathList, Arrays.asList(new KeyValue<String, String>("-source", "1.7"), new KeyValue<String, String>("-target", "1.7")));
+                        javacResult = BuilderUtil.javac(togetherSourceList, classesOutput, androidConfiguration.isApkDebug(), compileClasspathList, androidProject.getCompileProcessorPathList(), compileClasspathList, Arrays.asList(new KeyValue<String, String>("-source", "1.7"), new KeyValue<String, String>("-target", "1.7")));
                         // javacResult =
                         // BuilderUtil.executeJavac(java.getJavacExecutor(),
                         // compileClasspathList, togetherSourceList,
