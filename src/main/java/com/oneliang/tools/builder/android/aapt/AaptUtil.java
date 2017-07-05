@@ -314,6 +314,28 @@ public final class AaptUtil {
             }
 
             resourceCollector.addIntArrayResourceIfNotPresent(rType, resourceName, count, directory);
+        } else if (rType.equals(RType.STYLE)) {
+            for (Node itemNode = node.getFirstChild(); itemNode != null; itemNode = itemNode.getNextSibling()) {
+                if (itemNode.getNodeType() != Node.ELEMENT_NODE || !itemNode.getNodeName().equals(ITEM_TAG)) {
+                    continue;
+                }
+                String textContent = itemNode.getTextContent();
+                if (StringUtil.isNotBlank(textContent)) {
+                    textContent = textContent.trim();
+                }
+                if (textContent.startsWith(Constant.Symbol.QUESTION_MARK) && textContent.indexOf(Constant.Symbol.SLASH_LEFT) > 0) {
+                    int nameIndex = textContent.indexOf(Constant.Symbol.SLASH_LEFT);
+                    String type = textContent.substring(1, nameIndex);
+                    String name = textContent.substring(nameIndex + 1, textContent.length());
+                    try {
+                        RType itemRType = RType.valueOf(type.toUpperCase());
+                        resourceCollector.addIntResourceIfNotPresent(itemRType, name, directory);
+                    } catch (Exception e) {
+                        continue;
+                    }
+                }
+            }
+            resourceCollector.addIntResourceIfNotPresent(rType, resourceName, directory);
         } else {
             resourceCollector.addIntResourceIfNotPresent(rType, resourceName, directory);
         }
