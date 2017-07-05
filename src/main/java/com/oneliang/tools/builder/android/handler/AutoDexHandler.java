@@ -36,6 +36,7 @@ public class AutoDexHandler extends AbstractAndroidHandler {
             String cacheFullFilename = this.androidConfiguration.getMainAndroidProject().getCacheOutput() + Constant.Symbol.SLASH_LEFT + CACHE_DEX_FILE;
             CacheOption cacheOption = new CacheOption(cacheFullFilename, Arrays.asList(autoDexOutput));
             cacheOption.fileSuffix = Constant.Symbol.DOT + Constant.File.DEX;
+            cacheOption.deep = false;
             cacheOption.changedFileProcessor = new CacheOption.ChangedFileProcessor() {
                 public boolean process(Iterable<ChangedFile> changedFileIterable) {
                     boolean saveCache = false;
