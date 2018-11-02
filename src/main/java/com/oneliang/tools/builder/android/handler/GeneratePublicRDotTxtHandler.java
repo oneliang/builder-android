@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.android.base.AndroidProject.DirectoryType;
 import com.oneliang.tools.builder.android.base.PublicAndroidProject;
 import com.oneliang.tools.builder.base.BuilderUtil;
@@ -23,7 +23,7 @@ public class GeneratePublicRDotTxtHandler extends AbstractAndroidHandler {
         final String publicOutput = this.androidConfiguration.getPublicAndroidProject().getOutputHome();
         FileUtil.createDirectory(publicOutput);
         String resourceFileCacheFullFilename = this.androidConfiguration.getPublicAndroidProject().getCacheOutput() + "/" + GEN_R_CACHE;
-        String publicRDotTxt = publicOutput + Constant.Symbol.SLASH_LEFT + PublicAndroidProject.R_TXT;
+        String publicRDotTxt = publicOutput + Constants.Symbol.SLASH_LEFT + PublicAndroidProject.R_TXT;
         CacheOption cacheOption = new CacheOption(resourceFileCacheFullFilename, resourceDirectoryList);
         cacheOption.changedFileProcessor = new CacheOption.ChangedFileProcessor() {
             public boolean process(Iterable<ChangedFile> changedFileIterable) {

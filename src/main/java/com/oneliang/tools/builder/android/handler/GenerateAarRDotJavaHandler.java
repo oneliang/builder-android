@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.android.aapt.AaptUtil;
 import com.oneliang.tools.builder.android.aapt.RDotTxtEntry;
 import com.oneliang.tools.builder.android.aapt.RDotTxtEntry.RType;
@@ -33,10 +33,10 @@ public class GenerateAarRDotJavaHandler extends AbstractAndroidHandler {
         }
         final Map<RType, Set<RDotTxtEntry>> finalRTypeResourceMap = rTypeResourceMap;
         for (AarProject aarProject : aarProjectList) {
-            final String aarResOutput = aarProject.unzipOutput + Constant.Symbol.SLASH_LEFT + AarProject.AAR_RES;
-            final String aarAndroidManifest = aarProject.unzipOutput + Constant.Symbol.SLASH_LEFT + AarProject.AAR_ANDROID_MANIFEST_XML;
+            final String aarResOutput = aarProject.unzipOutput + Constants.Symbol.SLASH_LEFT + AarProject.AAR_RES;
+            final String aarAndroidManifest = aarProject.unzipOutput + Constants.Symbol.SLASH_LEFT + AarProject.AAR_ANDROID_MANIFEST_XML;
             if (FileUtil.hasFile(aarResOutput)) {
-                String aarResCacheFullFilename = aarProject.unzipOutput + Constant.Symbol.SLASH_LEFT + CACHE_RESOURCE_FILE;
+                String aarResCacheFullFilename = aarProject.unzipOutput + Constants.Symbol.SLASH_LEFT + CACHE_RESOURCE_FILE;
                 CacheOption cacheOption = new CacheOption(aarResCacheFullFilename, Arrays.asList(aarResOutput));
                 cacheOption.changedFileProcessor = new CacheOption.ChangedFileProcessor() {
                     public boolean process(Iterable<ChangedFile> changedFileIterable) {

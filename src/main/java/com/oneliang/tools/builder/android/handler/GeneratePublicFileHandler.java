@@ -7,9 +7,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.android.base.PublicAndroidProject;
-import com.oneliang.tools.builder.android.template.TemplateConstant;
+import com.oneliang.tools.builder.android.template.ConstantsTemplate;
 import com.oneliang.util.common.StringUtil;
 import com.oneliang.util.file.FileUtil;
 
@@ -37,9 +37,9 @@ public class GeneratePublicFileHandler extends AbstractAndroidHandler {
             if (packageTemplateByteArrayMap != null && packageTemplateByteArrayMap.containsKey(packageName)) {
                 templateInputStream = new ByteArrayInputStream(packageTemplateByteArrayMap.get(packageName));
             } else {
-                templateInputStream = TemplateConstant.getTemplateInputStream(TemplateConstant.Template.BUILD_CONFIG);
+                templateInputStream = ConstantsTemplate.getTemplateInputStream(ConstantsTemplate.Template.BUILD_CONFIG);
             }
-            String outputFullFilename = destinationDirectory + Constant.Symbol.SLASH_LEFT + packageName.replace(Constant.Symbol.DOT, Constant.Symbol.SLASH_LEFT) + Constant.Symbol.SLASH_LEFT + PublicAndroidProject.BUILD_CONFIG;
+            String outputFullFilename = destinationDirectory + Constants.Symbol.SLASH_LEFT + packageName.replace(Constants.Symbol.DOT, Constants.Symbol.SLASH_LEFT) + Constants.Symbol.SLASH_LEFT + PublicAndroidProject.BUILD_CONFIG;
             Map<String, String> valueMap = null;
             if (packageBuildConfigValueMap != null && packageBuildConfigValueMap.containsKey(packageName)) {
                 valueMap = packageBuildConfigValueMap.get(packageName);

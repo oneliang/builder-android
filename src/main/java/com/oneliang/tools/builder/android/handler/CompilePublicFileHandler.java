@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.android.base.PublicAndroidProject;
 import com.oneliang.tools.builder.base.BuilderUtil;
 import com.oneliang.tools.builder.base.CacheHandler.CacheOption.ChangedFileProcessor;
@@ -16,11 +16,11 @@ public class CompilePublicFileHandler extends AbstractAndroidHandler {
 
     public boolean handle() {
         FileUtil.MatchOption matchOption = new FileUtil.MatchOption(this.androidConfiguration.getPublicAndroidProject().getGenOutput());
-        matchOption.fileSuffix = Constant.Symbol.DOT + Constant.File.JAVA;
+        matchOption.fileSuffix = Constants.Symbol.DOT + Constants.File.JAVA;
         List<String> sourceList = FileUtil.findMatchFile(matchOption);
-        String javaCacheFullFilename = this.androidConfiguration.getPublicAndroidProject().getCacheOutput() + Constant.Symbol.SLASH_LEFT + CACHE_JAVA_FILE;
+        String javaCacheFullFilename = this.androidConfiguration.getPublicAndroidProject().getCacheOutput() + Constants.Symbol.SLASH_LEFT + CACHE_JAVA_FILE;
         CacheOption cacheOption = new CacheOption(javaCacheFullFilename, sourceList);
-        cacheOption.fileSuffix = Constant.Symbol.DOT + Constant.File.JAVA;
+        cacheOption.fileSuffix = Constants.Symbol.DOT + Constants.File.JAVA;
         cacheOption.changedFileProcessor = new ChangedFileProcessor() {
             public boolean process(Iterable<ChangedFile> changedFileIterable) {
                 if (changedFileIterable != null && changedFileIterable.iterator().hasNext()) {
@@ -45,7 +45,7 @@ public class CompilePublicFileHandler extends AbstractAndroidHandler {
                         return false;
                     }
                     FileUtil.createDirectory((!androidConfiguration.isApkDebug() ? androidConfiguration.getPublicAndroidProject().getOptimizedOriginalOutput() : androidConfiguration.getPublicAndroidProject().getOptimizedProguardOutput()));
-                    String publicJar = (!androidConfiguration.isApkDebug() ? androidConfiguration.getPublicAndroidProject().getOptimizedOriginalOutput() : androidConfiguration.getPublicAndroidProject().getOptimizedProguardOutput()) + "/" + PublicAndroidProject.PUBLIC + Constant.Symbol.DOT + Constant.File.JAR;
+                    String publicJar = (!androidConfiguration.isApkDebug() ? androidConfiguration.getPublicAndroidProject().getOptimizedOriginalOutput() : androidConfiguration.getPublicAndroidProject().getOptimizedProguardOutput()) + "/" + PublicAndroidProject.PUBLIC + Constants.Symbol.DOT + Constants.File.JAR;
                     // BuilderUtil.executeJar(this.java.getJarExecutor(),
                     // publicJar, classesOutputDirectory);
                     BuilderUtil.jar(publicJar, classesOutputDirectory);

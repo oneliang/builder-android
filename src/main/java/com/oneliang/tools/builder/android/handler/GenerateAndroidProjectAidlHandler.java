@@ -2,7 +2,7 @@ package com.oneliang.tools.builder.android.handler;
 
 import java.util.List;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.base.BuildException;
 import com.oneliang.tools.builder.base.BuilderUtil;
 import com.oneliang.tools.builder.base.CacheHandler.CacheOption.ChangedFileProcessor;
@@ -14,9 +14,9 @@ public class GenerateAndroidProjectAidlHandler extends AndroidProjectHandler {
 
     public boolean handle() {
         List<String> sourceDirectoryList = this.androidProject.getSourceDirectoryList();// getSources();
-        String aidlFileCacheFullFilename = this.androidProject.getCacheOutput() + Constant.Symbol.SLASH_LEFT + CACHE_AIDL_FILE;
+        String aidlFileCacheFullFilename = this.androidProject.getCacheOutput() + Constants.Symbol.SLASH_LEFT + CACHE_AIDL_FILE;
         CacheOption cacheOption = new CacheOption(aidlFileCacheFullFilename, sourceDirectoryList);
-        cacheOption.fileSuffix = Constant.Symbol.DOT + Constant.File.AIDL;
+        cacheOption.fileSuffix = Constants.Symbol.DOT + Constants.File.AIDL;
         cacheOption.changedFileProcessor = new ChangedFileProcessor() {
             public boolean process(Iterable<ChangedFile> changedFileIterable) {
                 boolean result = false;
@@ -30,7 +30,7 @@ public class GenerateAndroidProjectAidlHandler extends AndroidProjectHandler {
                         }
                         result = true;
                     } catch (Exception e) {
-                        logger.error(Constant.Base.EXCEPTION, e);
+                        logger.error(Constants.Base.EXCEPTION, e);
                         throw new BuildException(e);
                     }
                 } else {

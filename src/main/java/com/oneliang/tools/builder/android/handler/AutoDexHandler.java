@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.autodex.AutoDexUtil;
 import com.oneliang.tools.builder.android.base.AndroidProject;
 import com.oneliang.tools.builder.base.BuildException;
@@ -33,9 +33,9 @@ public class AutoDexHandler extends AbstractAndroidHandler {
             AutoDexUtil.autoDex(option);
 
             final String prepareOutput = this.androidConfiguration.getMainAndroidProject().getPrepareOutput();
-            String cacheFullFilename = this.androidConfiguration.getMainAndroidProject().getCacheOutput() + Constant.Symbol.SLASH_LEFT + CACHE_DEX_FILE;
+            String cacheFullFilename = this.androidConfiguration.getMainAndroidProject().getCacheOutput() + Constants.Symbol.SLASH_LEFT + CACHE_DEX_FILE;
             CacheOption cacheOption = new CacheOption(cacheFullFilename, Arrays.asList(autoDexOutput));
-            cacheOption.fileSuffix = Constant.Symbol.DOT + Constant.File.DEX;
+            cacheOption.fileSuffix = Constants.Symbol.DOT + Constants.File.DEX;
             cacheOption.deep = false;
             cacheOption.changedFileProcessor = new CacheOption.ChangedFileProcessor() {
                 public boolean process(Iterable<ChangedFile> changedFileIterable) {
@@ -79,11 +79,11 @@ public class AutoDexHandler extends AbstractAndroidHandler {
                     continue;
                 }
                 MatchOption matchOption = new MatchOption(androidProject.getOptimizedProguardOutput());
-                matchOption.fileSuffix = Constant.Symbol.DOT + Constant.File.JAR;
+                matchOption.fileSuffix = Constants.Symbol.DOT + Constants.File.JAR;
                 classesList.addAll(FileUtil.findMatchFile(matchOption));
             }
             MatchOption matchOption = new MatchOption(this.androidConfiguration.getPublicAndroidProject().getOptimizedProguardOutput());
-            matchOption.fileSuffix = Constant.Symbol.DOT + Constant.File.JAR;
+            matchOption.fileSuffix = Constants.Symbol.DOT + Constants.File.JAR;
             classesList.addAll(FileUtil.findMatchFile(matchOption));
         }
         return filterDuplicateFile(classesList);

@@ -3,7 +3,7 @@ package com.oneliang.tools.builder.android.base;
 import java.util.List;
 import java.util.Properties;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.util.common.StringUtil;
 
 public class GoogleApi {
@@ -25,7 +25,7 @@ public class GoogleApi {
 		this.name=properties.getProperty(NAME, StringUtil.BLANK).trim();
 		this.vendor=properties.getProperty(VENDOR, StringUtil.BLANK).trim();
 		this.apiLevel=Integer.parseInt(properties.getProperty(API, String.valueOf(0)).trim());
-		this.target=this.vendor+Constant.Symbol.COLON+this.name+Constant.Symbol.COLON+this.apiLevel;
+		this.target=this.vendor+Constants.Symbol.COLON+this.name+Constants.Symbol.COLON+this.apiLevel;
 	}
 
 	/**

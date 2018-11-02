@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.android.base.AndroidProjectForGradle.BuildConfig;
 import com.oneliang.tools.builder.base.KeyValue;
 import com.oneliang.tools.builder.base.Project;
@@ -76,9 +76,9 @@ public class AndroidConfigurationForJson extends AndroidConfiguration {
         for (int index = 0; index < projectsLength; index++) {
             JsonObject projectJsonObject = projectsJsonArray.getJsonObject(index);
             String projectName = projectJsonObject.getString("name");
-            projectName = projectName.replace(Constant.Symbol.SLASH_RIGHT, Constant.Symbol.SLASH_LEFT);
+            projectName = projectName.replace(Constants.Symbol.SLASH_RIGHT, Constants.Symbol.SLASH_LEFT);
             String path = projectJsonObject.getString("path");
-            String pathFullFilename = new File(path).getAbsolutePath().replace(Constant.Symbol.SLASH_RIGHT, Constant.Symbol.SLASH_LEFT);
+            String pathFullFilename = new File(path).getAbsolutePath().replace(Constants.Symbol.SLASH_RIGHT, Constants.Symbol.SLASH_LEFT);
             pathFullFilename = pathFullFilename.substring(0, pathFullFilename.length() - projectName.length() - 1);
             AndroidProjectForGradle androidProject = new AndroidProjectForGradle(pathFullFilename, projectName, this.buildOutput);
             androidProject.setDebug(this.apkDebug);
@@ -102,7 +102,7 @@ public class AndroidConfigurationForJson extends AndroidConfiguration {
                 }
             }
             // TODO: fix toolkit-box bug
-            String res = androidProject.getHome() + Constant.Symbol.SLASH_LEFT + "res";
+            String res = androidProject.getHome() + Constants.Symbol.SLASH_LEFT + "res";
             if (FileUtil.isExist(res)) {
                 androidProject.getResourceDirectoryList().add(res);
             }
@@ -131,7 +131,7 @@ public class AndroidConfigurationForJson extends AndroidConfiguration {
                 }
             }
             // TODO: fix toolkit-box bug
-            String libs = androidProject.getHome() + Constant.Symbol.SLASH_LEFT + "libs";
+            String libs = androidProject.getHome() + Constants.Symbol.SLASH_LEFT + "libs";
             if (FileUtil.isExist(libs)) {
                 androidProject.getLibsDirectoryList().add(libs);
             }
@@ -206,7 +206,7 @@ public class AndroidConfigurationForJson extends AndroidConfiguration {
             androidProject.setCompileTarget(this.compileTarget);
             for (String libsDirectory : androidProject.getLibsDirectoryList()) {
                 FileUtil.MatchOption matchOption = new FileUtil.MatchOption(libsDirectory);
-                matchOption.fileSuffix = Constant.Symbol.DOT + Constant.File.JAR;
+                matchOption.fileSuffix = Constants.Symbol.DOT + Constants.File.JAR;
                 androidProject.getDependJarSet().addAll(FileUtil.findMatchFile(matchOption));
             }
 

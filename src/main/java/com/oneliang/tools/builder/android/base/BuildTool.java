@@ -2,7 +2,7 @@ package com.oneliang.tools.builder.android.base;
 
 import java.util.Properties;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.util.common.StringUtil;
 
 public class BuildTool {
@@ -17,7 +17,7 @@ public class BuildTool {
 
 	public BuildTool(Properties properties){
 		this.pkgRevision=properties.getProperty(PKG_REVISION, StringUtil.BLANK).trim();
-		String[] array=pkgRevision.split(Constant.Symbol.SLASH_RIGHT+Constant.Symbol.DOT);
+		String[] array=pkgRevision.split(Constants.Symbol.SLASH_RIGHT+Constants.Symbol.DOT);
 		final int maxWeight=10000;
 		final int weightLevel=100;
 		for(int i=0;i<array.length;i++){

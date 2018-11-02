@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.android.base.AndroidProject;
 import com.oneliang.tools.builder.base.BuilderUtil;
 import com.oneliang.util.common.Generator;
@@ -21,10 +21,10 @@ public class GenerateApkPatchHandler extends AbstractAndroidHandler{
 			final String patchPrepareOutput=this.androidConfiguration.getPatchAndroidProject().getPrepareOutput();
 			FileUtil.createDirectory(patchOutput);
 			FileUtil.createDirectory(patchPrepareOutput);
-			String differentOutputFullFilename=this.androidConfiguration.getPatchAndroidProject().getDifferentOutput()+Constant.Symbol.SLASH_LEFT+AndroidProject.DIFFERENT_JAR;
+			String differentOutputFullFilename=this.androidConfiguration.getPatchAndroidProject().getDifferentOutput()+Constants.Symbol.SLASH_LEFT+AndroidProject.DIFFERENT_JAR;
 			String thisTimeAllClassesJarFullFilename=this.androidConfiguration.getMainAndroidProject().getAutoDexAllClassesJar();
 			FileUtil.differZip(differentOutputFullFilename, inputAllClassesJarFullFilename, thisTimeAllClassesJarFullFilename);
-			String outputDexFullFilename=patchPrepareOutput+Constant.Symbol.SLASH_LEFT+AndroidProject.CLASSES+Constant.Symbol.DOT+Constant.File.DEX;
+			String outputDexFullFilename=patchPrepareOutput+Constants.Symbol.SLASH_LEFT+AndroidProject.CLASSES+Constants.Symbol.DOT+Constants.File.DEX;
 			FileUtil.createFile(outputDexFullFilename);
 			BuilderUtil.androidDx(outputDexFullFilename, Arrays.asList(differentOutputFullFilename), true);
 			this.generateEmptyAndroidManifest(this.androidConfiguration.getPatchAndroidProject().getAndroidManifestOutput());
@@ -34,12 +34,12 @@ public class GenerateApkPatchHandler extends AbstractAndroidHandler{
 			//sign apk
 			final String outputSignApkFullFilename=this.androidConfiguration.getPatchAndroidProject().getApkFullFilename();
 			BuilderUtil.executeJarSigner(this.java.getJarSignerExecutor(), this.androidConfiguration.getJarKeystore(), this.androidConfiguration.getJarStorePassword(), this.androidConfiguration.getJarKeyPassword(), this.androidConfiguration.getJarKeyAlias(), outputSignApkFullFilename, outputUnsignApkFullFilename, this.androidConfiguration.getJarDigestalg(), this.androidConfiguration.getJarSigalg());
-			String patchInfo=patchOutput+Constant.Symbol.SLASH_LEFT+"patch.info";
+			String patchInfo=patchOutput+Constants.Symbol.SLASH_LEFT+"patch.info";
 			FileUtil.createFile(patchInfo);
 			OutputStream outputStream=null;
 			try{
 				outputStream=new FileOutputStream(patchInfo);
-				outputStream.write(Generator.MD5File(outputSignApkFullFilename).getBytes(Constant.Encoding.UTF8));
+				outputStream.write(Generator.MD5File(outputSignApkFullFilename).getBytes(Constants.Encoding.UTF8));
 				outputStream.flush();
 			}catch (Exception e) {
 				logger.error("write patch info failure", e);

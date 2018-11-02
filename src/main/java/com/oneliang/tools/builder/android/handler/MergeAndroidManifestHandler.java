@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.android.base.AndroidConfigurationForJson;
 import com.oneliang.tools.builder.android.base.AndroidProject;
 import com.oneliang.tools.builder.base.BuilderUtil;
@@ -46,11 +46,11 @@ public class MergeAndroidManifestHandler extends AbstractAndroidHandler {
         if (keyValueList != null && !keyValueList.isEmpty()) {
             byte[] androidManifestContentByteArray = FileUtil.readFile(androidManifestOutput);
             try {
-                String androidManifestContent = new String(androidManifestContentByteArray, Constant.Encoding.UTF8);
+                String androidManifestContent = new String(androidManifestContentByteArray, Constants.Encoding.UTF8);
                 for (KeyValue<String, String> keyValue : keyValueList) {
                     androidManifestContent = androidManifestContent.replace(keyValue.key, keyValue.value);
                 }
-                FileUtil.writeFile(androidManifestOutput, androidManifestContent.getBytes(Constant.Encoding.UTF8));
+                FileUtil.writeFile(androidManifestOutput, androidManifestContent.getBytes(Constants.Encoding.UTF8));
             } catch (Exception e) {
                 logger.error("Android manifest replace keyword error:" + e.getMessage());
             }

@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.android.base.Android;
 import com.oneliang.tools.builder.android.base.AndroidConfiguration;
 import com.oneliang.tools.builder.android.base.AndroidProject;
 import com.oneliang.tools.builder.android.base.PublicAndroidProject;
-import com.oneliang.tools.builder.android.template.TemplateConstant;
+import com.oneliang.tools.builder.android.template.ConstantsTemplate;
 import com.oneliang.tools.builder.base.Configuration;
 import com.oneliang.tools.builder.java.handler.AbstractJavaHandler;
 import com.oneliang.util.common.Generator;
@@ -71,7 +71,7 @@ public abstract class AbstractAndroidHandler extends AbstractJavaHandler {
     protected final void generateEmptyAndroidManifest(String outputFullFilename) {
         InputStream templateInputStream = null;
         try {
-            templateInputStream = TemplateConstant.getTemplateInputStream(TemplateConstant.Template.ANDROID_MANIFEST);
+            templateInputStream = ConstantsTemplate.getTemplateInputStream(ConstantsTemplate.Template.ANDROID_MANIFEST);
             Map<String, String> valueMap = new HashMap<String, String>();
             valueMap.put("#PACKAGE#", this.androidConfiguration.getMainAndroidProject().getPackageName());
             FileUtil.generateSimpleFile(templateInputStream, outputFullFilename, valueMap);
@@ -118,7 +118,7 @@ public abstract class AbstractAndroidHandler extends AbstractJavaHandler {
     private final List<String> getAndroidProjectJarList(AndroidProject androidProject, boolean original) {
         List<String> classesJarListAndLibraryList = new ArrayList<String>();
 
-        String projectClassesJar = (original ? androidProject.getOptimizedOriginalOutput() : androidProject.getOptimizedProguardOutput()) + "/" + androidProject.getName() + Constant.Symbol.DOT + Constant.File.JAR;
+        String projectClassesJar = (original ? androidProject.getOptimizedOriginalOutput() : androidProject.getOptimizedProguardOutput()) + "/" + androidProject.getName() + Constants.Symbol.DOT + Constants.File.JAR;
         if (FileUtil.isExist(projectClassesJar)) {
             classesJarListAndLibraryList.add(projectClassesJar);
         }
@@ -127,7 +127,7 @@ public abstract class AbstractAndroidHandler extends AbstractJavaHandler {
         if (jarSet != null && !jarSet.isEmpty()) {
             for (String jar : jarSet) {
                 // maybe same jar filename
-                String jarFilename = Generator.MD5File(jar) + Constant.Symbol.DOT + Constant.File.JAR;
+                String jarFilename = Generator.MD5File(jar) + Constants.Symbol.DOT + Constants.File.JAR;
                 String classesJar = (original ? androidProject.getOptimizedOriginalOutput() : androidProject.getOptimizedProguardOutput()) + "/" + jarFilename;
                 if (!classesJarListAndLibraryList.contains(classesJar)) {
                     classesJarListAndLibraryList.add(classesJar);
@@ -136,11 +136,11 @@ public abstract class AbstractAndroidHandler extends AbstractJavaHandler {
         }
 
         if (androidProject.getName().equals(this.androidConfiguration.getProjectMain())) {
-            String publicJar = (original ? this.androidConfiguration.getPublicAndroidProject().getOptimizedOriginalOutput() : this.androidConfiguration.getPublicAndroidProject().getOptimizedProguardOutput()) + "/" + PublicAndroidProject.PUBLIC + Constant.Symbol.DOT + Constant.File.JAR;
+            String publicJar = (original ? this.androidConfiguration.getPublicAndroidProject().getOptimizedOriginalOutput() : this.androidConfiguration.getPublicAndroidProject().getOptimizedProguardOutput()) + "/" + PublicAndroidProject.PUBLIC + Constants.Symbol.DOT + Constants.File.JAR;
             if (FileUtil.isExist(publicJar)) {
                 classesJarListAndLibraryList.add(publicJar);
             }
-            String publicRJar = (original ? this.androidConfiguration.getPublicRAndroidProject().getOptimizedOriginalOutput() : this.androidConfiguration.getPublicRAndroidProject().getOptimizedProguardOutput()) + "/" + PublicAndroidProject.PUBLIC_R + Constant.Symbol.DOT + Constant.File.JAR;
+            String publicRJar = (original ? this.androidConfiguration.getPublicRAndroidProject().getOptimizedOriginalOutput() : this.androidConfiguration.getPublicRAndroidProject().getOptimizedProguardOutput()) + "/" + PublicAndroidProject.PUBLIC_R + Constants.Symbol.DOT + Constants.File.JAR;
             if (FileUtil.isExist(publicRJar)) {
                 classesJarListAndLibraryList.add(publicRJar);
             }
@@ -176,6 +176,6 @@ public abstract class AbstractAndroidHandler extends AbstractJavaHandler {
      * @return String
      */
     protected String optimizeName(String name) {
-        return StringUtil.nullToBlank(name).replace(Constant.Symbol.SLASH_LEFT, Constant.Symbol.MINUS).replace(Constant.Symbol.SLASH_RIGHT, Constant.Symbol.MINUS);
+        return StringUtil.nullToBlank(name).replace(Constants.Symbol.SLASH_LEFT, Constants.Symbol.MINUS).replace(Constants.Symbol.SLASH_RIGHT, Constants.Symbol.MINUS);
     }
 }

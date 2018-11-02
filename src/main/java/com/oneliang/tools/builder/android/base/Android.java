@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.base.BuilderUtil;
 import com.oneliang.util.common.StringUtil;
 import com.oneliang.util.file.FileUtil;
@@ -66,7 +66,7 @@ public class Android {
 		this.home=home;
 		File file=new File(this.home);
 		this.home=file.getAbsolutePath();
-		String osExecuteFileSuffix=BuilderUtil.isWindowsOS()?(Constant.Symbol.DOT+Constant.File.EXE):StringUtil.BLANK;
+		String osExecuteFileSuffix=BuilderUtil.isWindowsOS()?(Constants.Symbol.DOT+Constants.File.EXE):StringUtil.BLANK;
 
 		if(StringUtil.isBlank(buildToolsVersion)){
 			String buildToolsDirectory=this.home+"/"+BUILD_TOOLS;
@@ -129,7 +129,7 @@ public class Android {
 						googleApi.setDirectory(googleApiDirectoryPath);
 						String googleApiLibs=googleApi.getDirectory()+"/"+GOOGLE_API_LIBS;
 						FileUtil.MatchOption matchOption=new FileUtil.MatchOption(googleApiLibs);
-						matchOption.fileSuffix=Constant.Symbol.DOT+Constant.File.JAR;
+						matchOption.fileSuffix=Constants.Symbol.DOT+Constants.File.JAR;
 						googleApi.setJarList(FileUtil.findMatchFile(matchOption));
 						this.googleApiMap.put(googleApi.getTarget(), googleApi);
 					} catch (Exception e) {

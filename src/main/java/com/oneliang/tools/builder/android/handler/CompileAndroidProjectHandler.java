@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.base.BuildException;
 import com.oneliang.tools.builder.base.BuilderUtil;
 import com.oneliang.tools.builder.base.Cache;
@@ -21,9 +21,9 @@ public class CompileAndroidProjectHandler extends AndroidProjectHandler {
 
     public boolean handle() {
         final List<String> sourceFileDirectoryList = androidProject.getSourceDirectoryList();
-        String sourceFileCacheFullFilename = androidProject.getCacheOutput() + Constant.Symbol.SLASH_LEFT + CACHE_JAVA_FILE;
+        String sourceFileCacheFullFilename = androidProject.getCacheOutput() + Constants.Symbol.SLASH_LEFT + CACHE_JAVA_FILE;
         CacheOption cacheOption = new CacheOption(sourceFileCacheFullFilename, sourceFileDirectoryList);
-        cacheOption.fileSuffix = Constant.Symbol.DOT + Constant.File.JAVA;
+        cacheOption.fileSuffix = Constants.Symbol.DOT + Constants.File.JAVA;
         cacheOption.changedFileProcessor = new ChangedFileProcessor() {
             public boolean process(Iterable<ChangedFile> changedFileIterable) {
                 boolean result = false;
@@ -31,7 +31,7 @@ public class CompileAndroidProjectHandler extends AndroidProjectHandler {
                 List<String> classpathList = androidProject.getCompileClasspathList();
                 if (changedFileIterable != null && changedFileIterable.iterator().hasNext()) {
                     List<String> togetherSourceList = new ArrayList<String>();
-                    String javacSourceListFullFilename = androidProject.getCacheOutput() + Constant.Symbol.SLASH_LEFT + JAVAC_SOURCE_FILE_LIST;
+                    String javacSourceListFullFilename = androidProject.getCacheOutput() + Constants.Symbol.SLASH_LEFT + JAVAC_SOURCE_FILE_LIST;
                     try {
                         StringBuilder stringBuilder = new StringBuilder();
                         for (ChangedFile changedFile : changedFileIterable) {
@@ -48,12 +48,12 @@ public class CompileAndroidProjectHandler extends AndroidProjectHandler {
                             // logger.log("\t"+javaProject.getName()+" compile
                             // source file:"+source);
                         }
-                        FileUtil.writeFile(javacSourceListFullFilename, stringBuilder.toString().getBytes(Constant.Encoding.UTF8));
+                        FileUtil.writeFile(javacSourceListFullFilename, stringBuilder.toString().getBytes(Constants.Encoding.UTF8));
                     } catch (Exception e) {
-                        logger.error(Constant.Base.EXCEPTION, e);
+                        logger.error(Constants.Base.EXCEPTION, e);
                         throw new BuildException(e);
                     }
-                    togetherSourceList.add(Constant.Symbol.AT + javacSourceListFullFilename);
+                    togetherSourceList.add(Constants.Symbol.AT + javacSourceListFullFilename);
                     List<String> compileClasspathList = new ArrayList<String>();
                     compileClasspathList.addAll(classpathList);
                     List<String> onlyCompileClasspathList = androidProject.getOnlyCompileClasspathList();
@@ -72,7 +72,7 @@ public class CompileAndroidProjectHandler extends AndroidProjectHandler {
                         // classesOutput, androidConfiguration.isApkDebug(),
                         // androidProject.getCompileProcessorPathList());
                     } catch (Throwable e) {
-                        logger.error(androidProject.getName() + Constant.Symbol.COLON + Constant.Base.EXCEPTION, e);
+                        logger.error(androidProject.getName() + Constants.Symbol.COLON + Constants.Base.EXCEPTION, e);
                         javacResult = 1;
                     }
                     if (javacResult != 0) {
@@ -94,9 +94,9 @@ public class CompileAndroidProjectHandler extends AndroidProjectHandler {
             return false;
         }
         // jar file cache
-        String jarFileCacheFullFilename = androidProject.getCacheOutput() + Constant.Symbol.SLASH_LEFT + CACHE_JAR_FILE;
+        String jarFileCacheFullFilename = androidProject.getCacheOutput() + Constants.Symbol.SLASH_LEFT + CACHE_JAR_FILE;
         cacheOption = new CacheOption(jarFileCacheFullFilename, this.androidProject.getLibsDirectoryList());
-        cacheOption.fileSuffix = Constant.Symbol.DOT + Constant.File.JAR;
+        cacheOption.fileSuffix = Constants.Symbol.DOT + Constants.File.JAR;
         cacheOption.changedFileProcessor = new CacheOption.ChangedFileProcessor() {
             public boolean process(Iterable<ChangedFile> changedFileIterable) {
                 if ((javaFileCache != null && (!javaFileCache.changedFileMap.isEmpty())) || (changedFileIterable != null && (changedFileIterable.iterator().hasNext()))) {

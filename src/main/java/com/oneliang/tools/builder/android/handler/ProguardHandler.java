@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.android.base.AndroidProject;
 import com.oneliang.tools.builder.android.base.PublicAndroidProject;
 import com.oneliang.tools.builder.base.BuilderUtil;
@@ -45,13 +45,13 @@ public class ProguardHandler extends AbstractAndroidHandler {
             AndroidProject mainAndroidProject = this.androidConfiguration.getMainAndroidProject();
             List<ProguardJarPair> proguardJarPairList = new ArrayList<ProguardJarPair>();
             // public
-            String inputPublicJar = this.androidConfiguration.getPublicAndroidProject().getOptimizedOriginalOutput() + "/" + PublicAndroidProject.PUBLIC + Constant.Symbol.DOT + Constant.File.JAR;
-            String outputPublicJar = this.androidConfiguration.getPublicAndroidProject().getOptimizedProguardOutput() + "/" + PublicAndroidProject.PUBLIC + Constant.Symbol.DOT + Constant.File.JAR;
+            String inputPublicJar = this.androidConfiguration.getPublicAndroidProject().getOptimizedOriginalOutput() + "/" + PublicAndroidProject.PUBLIC + Constants.Symbol.DOT + Constants.File.JAR;
+            String outputPublicJar = this.androidConfiguration.getPublicAndroidProject().getOptimizedProguardOutput() + "/" + PublicAndroidProject.PUBLIC + Constants.Symbol.DOT + Constants.File.JAR;
             proguardJarPairList.add(new ProguardJarPair(inputPublicJar, outputPublicJar));
             // public r
-            String inputPublicRJar = this.androidConfiguration.getPublicRAndroidProject().getOptimizedOriginalOutput() + "/" + PublicAndroidProject.PUBLIC_R + Constant.Symbol.DOT + Constant.File.JAR;
+            String inputPublicRJar = this.androidConfiguration.getPublicRAndroidProject().getOptimizedOriginalOutput() + "/" + PublicAndroidProject.PUBLIC_R + Constants.Symbol.DOT + Constants.File.JAR;
             if (FileUtil.isExist(inputPublicRJar)) {
-                String outputPublicRJar = this.androidConfiguration.getPublicRAndroidProject().getOptimizedProguardOutput() + "/" + PublicAndroidProject.PUBLIC_R + Constant.Symbol.DOT + Constant.File.JAR;
+                String outputPublicRJar = this.androidConfiguration.getPublicRAndroidProject().getOptimizedProguardOutput() + "/" + PublicAndroidProject.PUBLIC_R + Constants.Symbol.DOT + Constants.File.JAR;
                 proguardJarPairList.add(new ProguardJarPair(inputPublicRJar, outputPublicRJar));
             }
             Map<String, String> jarMap = new HashMap<String, String>();
@@ -61,14 +61,14 @@ public class ProguardHandler extends AbstractAndroidHandler {
                 }
                 Set<String> jarSet = androidProject.getDependJarSet();
                 String optimizeProjectName = optimizeName(androidProject.getName());
-                String inputAndroidProjectJar = androidProject.getOptimizedOriginalOutput() + "/" + optimizeProjectName + Constant.Symbol.DOT + Constant.File.JAR;
+                String inputAndroidProjectJar = androidProject.getOptimizedOriginalOutput() + "/" + optimizeProjectName + Constants.Symbol.DOT + Constants.File.JAR;
                 if (FileUtil.isExist(inputAndroidProjectJar)) {
-                    String outputAndroidProjectJar = androidProject.getOptimizedProguardOutput() + "/" + optimizeProjectName + Constant.Symbol.DOT + Constant.File.JAR;
+                    String outputAndroidProjectJar = androidProject.getOptimizedProguardOutput() + "/" + optimizeProjectName + Constants.Symbol.DOT + Constants.File.JAR;
                     proguardJarPairList.add(new ProguardJarPair(inputAndroidProjectJar, outputAndroidProjectJar));
                 }
                 for (String jar : jarSet) {
                     File jarFile = new File(jar);
-                    String jarFilename = Generator.MD5File(jarFile.getAbsolutePath()) + Constant.Symbol.DOT + Constant.File.JAR;
+                    String jarFilename = Generator.MD5File(jarFile.getAbsolutePath()) + Constants.Symbol.DOT + Constants.File.JAR;
                     if (!jarMap.containsKey(jarFilename)) {
                         String inputJar = androidProject.getOptimizedOriginalOutput() + "/" + jarFilename;
                         String outputJar = androidProject.getOptimizedProguardOutput() + "/" + jarFilename;

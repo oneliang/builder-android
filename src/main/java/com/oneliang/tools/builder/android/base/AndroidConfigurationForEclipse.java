@@ -15,7 +15,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.base.BuildException;
 import com.oneliang.tools.builder.base.Project;
 import com.oneliang.util.common.JavaXmlUtil;
@@ -59,7 +59,7 @@ public class AndroidConfigurationForEclipse extends AndroidConfiguration{
 				if(androidProject.equals(mainAndroidProject)){
 					properties=FileUtil.getProperties(this.projectMainProperties);
 				}else{
-					properties=FileUtil.getProperties(androidProject.getHome()+Constant.Symbol.SLASH_LEFT+PROJECT_PROPERTIES);
+					properties=FileUtil.getProperties(androidProject.getHome()+Constants.Symbol.SLASH_LEFT+PROJECT_PROPERTIES);
 				}
 				Iterator<Entry<Object,Object>> iterator=properties.entrySet().iterator();
 				List<String> dependProjectList=new ArrayList<String>();
@@ -96,7 +96,7 @@ public class AndroidConfigurationForEclipse extends AndroidConfiguration{
 				androidProject.setDependProjects(dependProjectList.toArray(new String[]{}));
 				this.readProjectOtherProperties(androidProject);
 				//read classpath
-				String classpath=androidProject.getHome()+Constant.Symbol.SLASH_LEFT+CLASSPATH;
+				String classpath=androidProject.getHome()+Constants.Symbol.SLASH_LEFT+CLASSPATH;
 				List<String> sourceDirectoryList=new ArrayList<String>();
 				Document document=null;
 				try{
@@ -152,7 +152,7 @@ public class AndroidConfigurationForEclipse extends AndroidConfiguration{
 		if(project!=null&&project instanceof AndroidProject){
 			AndroidProject androidProject=(AndroidProject)project;
 			if(key.equals("only.compile.classpath")&&StringUtil.isNotBlank(value)){
-				String[] onlyCompileClasspathArray=value.split(Constant.Symbol.COMMA);
+				String[] onlyCompileClasspathArray=value.split(Constants.Symbol.COMMA);
 				if(onlyCompileClasspathArray!=null){
 					List<String> onlyCompileClasspathList=new ArrayList<String>();
 					for(String onlyCompileClasspath:onlyCompileClasspathArray){

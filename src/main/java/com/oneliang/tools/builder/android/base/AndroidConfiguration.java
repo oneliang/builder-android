@@ -21,7 +21,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.android.handler.AndroidProjectHandler;
 import com.oneliang.tools.builder.android.handler.MultiAndroidProjectDexHandler;
 import com.oneliang.tools.builder.base.BuildException;
@@ -131,10 +131,10 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
             this.buildOutput = file.getAbsolutePath() + "/builder-gen";
         }
         if (FileUtil.isExist(this.autoDexMainDexOtherClassesFile)) {
-            this.autoDexMainDexOtherClasses = FileUtil.readFileContentIgnoreLine(this.autoDexMainDexOtherClassesFile, Constant.Symbol.COMMA);
+            this.autoDexMainDexOtherClasses = FileUtil.readFileContentIgnoreLine(this.autoDexMainDexOtherClassesFile, Constants.Symbol.COMMA);
         }
         if (StringUtil.isNotBlank(this.autoDexMainDexOtherClasses)) {
-            String[] classArray = this.autoDexMainDexOtherClasses.split(Constant.Symbol.COMMA);
+            String[] classArray = this.autoDexMainDexOtherClasses.split(Constants.Symbol.COMMA);
             if (classArray != null) {
                 for (String clazz : classArray) {
                     this.autoDexMainDexOtherClassList.add(clazz.trim());
@@ -167,22 +167,22 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
         }
         this.android = new Android(this.androidSdk, this.androidBuildToolsVersion);
 
-        logger.info(MAP_KEY_NEED_TO_CLEAN + Constant.Symbol.COLON + this.needToClean);
-        logger.info(MAP_KEY_ANDROID_SDK + Constant.Symbol.COLON + this.androidSdk);
-        logger.info(MAP_KEY_ANDROID_BUILD_TOOLS_VERSION + Constant.Symbol.COLON + this.android.getBuildTools());
-        logger.info(MAP_KEY_PROJECT_MAIN_PROPERTIES + Constant.Symbol.COLON + this.projectMainProperties);
-        logger.info(MAP_KEY_BUILD_OUTPUT_ECLIPSE + Constant.Symbol.COLON + this.buildOutputEclipse);
-        logger.info(MAP_KEY_APK_DEBUG + Constant.Symbol.COLON + this.apkDebug);
-        logger.info(MAP_KEY_APK_PRE_RELEASE + Constant.Symbol.COLON + this.apkPreRelease);
-        logger.info(MAP_KEY_AUTO_DEX + Constant.Symbol.COLON + this.autoDex);
-        logger.info(MAP_KEY_AUTO_DEX_LINEAR_ALLOC_LIMIT + Constant.Symbol.COLON + this.autoDexLinearAllocLimit);
-        logger.info(MAP_KEY_AUTO_DEX_FIELD_LIMIT + Constant.Symbol.COLON + this.autoDexFieldLimit);
-        logger.info(MAP_KEY_AUTO_DEX_METHOD_LIMIT + Constant.Symbol.COLON + this.autoDexMethodLimit);
-        logger.info(MAP_KEY_AUTO_DEX_MAIN_DEX_OTHER_CLASSES + Constant.Symbol.COLON + this.autoDexMainDexOtherClasses);
-        logger.info(MAP_KEY_APK_PATCH_INPUT_ALL_CLASSES_JAR + Constant.Symbol.COLON + this.apkPatchInputAllClassesJar);
-        logger.info(MAP_KEY_PACKAGE_NAME + Constant.Symbol.COLON + this.packageName);
-        logger.info(MAP_KEY_MIN_SDK_VERSION + Constant.Symbol.COLON + this.minSdkVersion);
-        logger.info(MAP_KEY_TARGET_SDK_VERSION + Constant.Symbol.COLON + this.targetSdkVersion);
+        logger.info(MAP_KEY_NEED_TO_CLEAN + Constants.Symbol.COLON + this.needToClean);
+        logger.info(MAP_KEY_ANDROID_SDK + Constants.Symbol.COLON + this.androidSdk);
+        logger.info(MAP_KEY_ANDROID_BUILD_TOOLS_VERSION + Constants.Symbol.COLON + this.android.getBuildTools());
+        logger.info(MAP_KEY_PROJECT_MAIN_PROPERTIES + Constants.Symbol.COLON + this.projectMainProperties);
+        logger.info(MAP_KEY_BUILD_OUTPUT_ECLIPSE + Constants.Symbol.COLON + this.buildOutputEclipse);
+        logger.info(MAP_KEY_APK_DEBUG + Constants.Symbol.COLON + this.apkDebug);
+        logger.info(MAP_KEY_APK_PRE_RELEASE + Constants.Symbol.COLON + this.apkPreRelease);
+        logger.info(MAP_KEY_AUTO_DEX + Constants.Symbol.COLON + this.autoDex);
+        logger.info(MAP_KEY_AUTO_DEX_LINEAR_ALLOC_LIMIT + Constants.Symbol.COLON + this.autoDexLinearAllocLimit);
+        logger.info(MAP_KEY_AUTO_DEX_FIELD_LIMIT + Constants.Symbol.COLON + this.autoDexFieldLimit);
+        logger.info(MAP_KEY_AUTO_DEX_METHOD_LIMIT + Constants.Symbol.COLON + this.autoDexMethodLimit);
+        logger.info(MAP_KEY_AUTO_DEX_MAIN_DEX_OTHER_CLASSES + Constants.Symbol.COLON + this.autoDexMainDexOtherClasses);
+        logger.info(MAP_KEY_APK_PATCH_INPUT_ALL_CLASSES_JAR + Constants.Symbol.COLON + this.apkPatchInputAllClassesJar);
+        logger.info(MAP_KEY_PACKAGE_NAME + Constants.Symbol.COLON + this.packageName);
+        logger.info(MAP_KEY_MIN_SDK_VERSION + Constants.Symbol.COLON + this.minSdkVersion);
+        logger.info(MAP_KEY_TARGET_SDK_VERSION + Constants.Symbol.COLON + this.targetSdkVersion);
     }
 
     protected void initializeAllProject() {
@@ -749,7 +749,7 @@ public abstract class AndroidConfiguration extends JavaConfiguration {
                                 if (activityActionNode != null) {
                                     String activityActionName = activityActionNode.getTextContent();
                                     if (activityActionName.equals("android.intent.action.MAIN")) {
-                                        if (activityName.startsWith(Constant.Symbol.DOT)) {
+                                        if (activityName.startsWith(Constants.Symbol.DOT)) {
                                             this.mainAndroidProjectMainActivityName = activityName;
                                         } else {
                                             this.mainAndroidProjectMainActivityName = activityName.replace(this.mainAndroidProject.getPackageName(), StringUtil.BLANK);

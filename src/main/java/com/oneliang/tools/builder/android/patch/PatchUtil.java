@@ -18,7 +18,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.android.aapt.RDotTxtEntry;
 import com.oneliang.tools.builder.android.aapt.RDotTxtEntry.RType;
 import com.oneliang.tools.builder.android.aapt.ResourceEntry;
@@ -65,7 +65,7 @@ public final class PatchUtil {
             XPathFactory xPathFactory = XPathFactory.newInstance();
             XPath xPath = xPathFactory.newXPath();
             Document document = JavaXmlUtil.parse(resourceFullFilename);
-            String outputFullFilename = outputDirectory + Constant.Symbol.SLASH_LEFT + directoryName + Constant.Symbol.SLASH_LEFT + rType.toString() + "s.xml";
+            String outputFullFilename = outputDirectory + Constants.Symbol.SLASH_LEFT + directoryName + Constants.Symbol.SLASH_LEFT + rType.toString() + "s.xml";
             Document outputDocument = null;
             if (FileUtil.isExist(outputFullFilename)) {
                 outputDocument = JavaXmlUtil.parse(outputFullFilename);
@@ -169,7 +169,7 @@ public final class PatchUtil {
             XPathFactory xPathFactory = XPathFactory.newInstance();
             XPath xPath = xPathFactory.newXPath();
             Document document = JavaXmlUtil.parse(resourceFullFilename);
-            String outputFullFilename = outputDirectory + Constant.Symbol.SLASH_LEFT + directoryName + Constant.Symbol.SLASH_LEFT + rType.toString() + "s.xml";
+            String outputFullFilename = outputDirectory + Constants.Symbol.SLASH_LEFT + directoryName + Constants.Symbol.SLASH_LEFT + rType.toString() + "s.xml";
             Document outputDocument = null;
             if (FileUtil.isExist(outputFullFilename)) {
                 outputDocument = JavaXmlUtil.parse(outputFullFilename);

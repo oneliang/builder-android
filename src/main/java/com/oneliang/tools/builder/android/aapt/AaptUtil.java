@@ -30,7 +30,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.android.aapt.RDotTxtEntry.IdType;
 import com.oneliang.tools.builder.android.aapt.RDotTxtEntry.RType;
 import com.oneliang.tools.builder.android.patch.PatchUtil.PatchUtilException;
@@ -95,7 +95,7 @@ public final class AaptUtil {
 
     public static void processXmlFilesForIds(String resourceDirectory, List<RDotTxtEntry> references, AaptResourceCollector resourceCollector) throws Exception {
         FileUtil.MatchOption matchOption = new FileUtil.MatchOption(resourceDirectory);
-        matchOption.fileSuffix = Constant.Symbol.DOT + Constant.File.XML;
+        matchOption.fileSuffix = Constants.Symbol.DOT + Constants.File.XML;
         List<String> xmlFullFilenameList = FileUtil.findMatchFile(matchOption);
         if (xmlFullFilenameList != null) {
             String directory = new File(resourceDirectory).getAbsolutePath();
@@ -323,8 +323,8 @@ public final class AaptUtil {
                 if (StringUtil.isNotBlank(textContent)) {
                     textContent = textContent.trim();
                 }
-                if (textContent.startsWith(Constant.Symbol.QUESTION_MARK) && textContent.indexOf(Constant.Symbol.SLASH_LEFT) > 0) {
-                    int nameIndex = textContent.indexOf(Constant.Symbol.SLASH_LEFT);
+                if (textContent.startsWith(Constants.Symbol.QUESTION_MARK) && textContent.indexOf(Constants.Symbol.SLASH_LEFT) > 0) {
+                    int nameIndex = textContent.indexOf(Constants.Symbol.SLASH_LEFT);
                     String type = textContent.substring(1, nameIndex);
                     String name = textContent.substring(nameIndex + 1, textContent.length());
                     try {
@@ -401,7 +401,7 @@ public final class AaptUtil {
      * @param isFinal
      */
     public static void writeRJava(String outputDirectory, String packageName, Map<RType, Set<RDotTxtEntry>> rTypeResourceMap, boolean isFinal) {
-        String outputFullFilename = new File(outputDirectory).getAbsolutePath() + Constant.Symbol.SLASH_LEFT + (packageName.replace(Constant.Symbol.DOT, Constant.Symbol.SLASH_LEFT) + Constant.Symbol.SLASH_LEFT + "R" + Constant.Symbol.DOT + Constant.File.JAVA);
+        String outputFullFilename = new File(outputDirectory).getAbsolutePath() + Constants.Symbol.SLASH_LEFT + (packageName.replace(Constants.Symbol.DOT, Constants.Symbol.SLASH_LEFT) + Constants.Symbol.SLASH_LEFT + "R" + Constants.Symbol.DOT + Constants.File.JAVA);
         FileUtil.createFile(outputFullFilename);
         PrintWriter writer = null;
         try {
@@ -485,19 +485,19 @@ public final class AaptUtil {
         if (node != null) {
             stringBuilder.append(node.getNodeName());
             NamedNodeMap namedNodeMap = node.getAttributes();
-            stringBuilder.append(Constant.Symbol.MIDDLE_BRACKET_LEFT);
+            stringBuilder.append(Constants.Symbol.MIDDLE_BRACKET_LEFT);
             int namedNodeMapLength = namedNodeMap.getLength();
             for (int j = 0; j < namedNodeMapLength; j++) {
                 Node attributeNode = namedNodeMap.item(j);
-                stringBuilder.append(Constant.Symbol.AT + attributeNode.getNodeName() + Constant.Symbol.EQUAL + attributeNode.getNodeValue());
+                stringBuilder.append(Constants.Symbol.AT + attributeNode.getNodeName() + Constants.Symbol.EQUAL + attributeNode.getNodeValue());
                 if (j < namedNodeMapLength - 1) {
-                    stringBuilder.append(Constant.Symbol.COMMA);
+                    stringBuilder.append(Constants.Symbol.COMMA);
                 }
             }
-            stringBuilder.append(Constant.Symbol.MIDDLE_BRACKET_RIGHT);
+            stringBuilder.append(Constants.Symbol.MIDDLE_BRACKET_RIGHT);
             String value = StringUtil.nullToBlank(isNoChild ? node.getTextContent() : node.getNodeValue()).trim();
             if (StringUtil.isNotBlank(value)) {
-                stringBuilder.append(Constant.Symbol.EQUAL + value);
+                stringBuilder.append(Constants.Symbol.EQUAL + value);
             }
         }
         return stringBuilder.toString();
@@ -569,8 +569,8 @@ public final class AaptUtil {
         try {
             FileUtil.createFile(outputIdsXmlFullFilename);
             FileUtil.createFile(outputPublicXmlFullFilename);
-            idsWriter = new PrintWriter(new File(outputIdsXmlFullFilename), Constant.Encoding.UTF8);
-            publicWriter = new PrintWriter(new File(outputPublicXmlFullFilename), Constant.Encoding.UTF8);
+            idsWriter = new PrintWriter(new File(outputIdsXmlFullFilename), Constants.Encoding.UTF8);
+            publicWriter = new PrintWriter(new File(outputPublicXmlFullFilename), Constants.Encoding.UTF8);
             idsWriter.println("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
             publicWriter.println("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
             idsWriter.println("<resources>");
@@ -601,10 +601,10 @@ public final class AaptUtil {
                             idsWriter.println("<item type=\"" + rType + "\" name=\"" + rDotTxtEntry.name + "\"/>");
                         } else if (rType.equals(RType.STYLE)) {
 
-                            if (rDotTxtEntry.name.indexOf(Constant.Symbol.UNDERLINE) > 0) {
+                            if (rDotTxtEntry.name.indexOf(Constants.Symbol.UNDERLINE) > 0) {
                                 // idsWriter.println("<item type=\""+rType+"\"
-                                // name=\""+(rDotTxtEntry.name.replace(Constant.Symbol.UNDERLINE,
-                                // Constant.Symbol.DOT))+"\"/>");
+                                // name=\""+(rDotTxtEntry.name.replace(Constants.Symbol.UNDERLINE,
+                                // Constants.Symbol.DOT))+"\"/>");
                             }
                         }
                     }

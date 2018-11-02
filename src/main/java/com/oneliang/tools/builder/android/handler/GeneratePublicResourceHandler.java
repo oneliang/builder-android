@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.android.aapt.AaptResourceCollector;
 import com.oneliang.tools.builder.android.aapt.AaptUtil;
 import com.oneliang.tools.builder.android.aapt.RDotTxtEntry;
@@ -69,10 +69,10 @@ public class GeneratePublicResourceHandler extends AbstractAndroidHandler {
         // after find modify file,add this res folder to main project
         // before add res folder to main project,must keep the original res and
         // r.txt
-        String originalOutputIdsXmlFullFilename = this.androidConfiguration.getPublicRAndroidProject().getResourceOriginalOutput() + Constant.Symbol.SLASH_LEFT + "values/" + this.androidConfiguration.getProjectMain() + Constant.Symbol.UNDERLINE + AndroidProject.IDS_XML;
-        String originalOutputPublicXmlFullFilename = this.androidConfiguration.getPublicRAndroidProject().getResourceOriginalOutput() + Constant.Symbol.SLASH_LEFT + "values/" + this.androidConfiguration.getProjectMain() + Constant.Symbol.UNDERLINE + AndroidProject.PUBLIC_XML;
-        String newOutputIdsXmlFullFilename = this.androidConfiguration.getPublicRAndroidProject().getResourceOutput() + Constant.Symbol.SLASH_LEFT + "values/" + this.androidConfiguration.getProjectMain() + Constant.Symbol.UNDERLINE + AndroidProject.IDS_XML;
-        String newOutputPublicXmlFullFilename = this.androidConfiguration.getPublicRAndroidProject().getResourceOutput() + Constant.Symbol.SLASH_LEFT + "values/" + this.androidConfiguration.getProjectMain() + Constant.Symbol.UNDERLINE + AndroidProject.PUBLIC_XML;
+        String originalOutputIdsXmlFullFilename = this.androidConfiguration.getPublicRAndroidProject().getResourceOriginalOutput() + Constants.Symbol.SLASH_LEFT + "values/" + this.androidConfiguration.getProjectMain() + Constants.Symbol.UNDERLINE + AndroidProject.IDS_XML;
+        String originalOutputPublicXmlFullFilename = this.androidConfiguration.getPublicRAndroidProject().getResourceOriginalOutput() + Constants.Symbol.SLASH_LEFT + "values/" + this.androidConfiguration.getProjectMain() + Constants.Symbol.UNDERLINE + AndroidProject.PUBLIC_XML;
+        String newOutputIdsXmlFullFilename = this.androidConfiguration.getPublicRAndroidProject().getResourceOutput() + Constants.Symbol.SLASH_LEFT + "values/" + this.androidConfiguration.getProjectMain() + Constants.Symbol.UNDERLINE + AndroidProject.IDS_XML;
+        String newOutputPublicXmlFullFilename = this.androidConfiguration.getPublicRAndroidProject().getResourceOutput() + Constants.Symbol.SLASH_LEFT + "values/" + this.androidConfiguration.getProjectMain() + Constants.Symbol.UNDERLINE + AndroidProject.PUBLIC_XML;
         AaptUtil.generatePublicResourceXml(aaptResourceCollector, originalOutputIdsXmlFullFilename, originalOutputPublicXmlFullFilename);
         // copy original id.xml and public.xml to resource output
         FileUtil.copyFile(originalOutputIdsXmlFullFilename, newOutputIdsXmlFullFilename, FileUtil.FileCopyType.FILE_TO_FILE);

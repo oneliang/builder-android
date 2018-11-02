@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.android.base.AndroidProject;
 import com.oneliang.tools.builder.android.base.AndroidProject.DirectoryType;
 import com.oneliang.tools.builder.base.BuilderUtil;
@@ -38,7 +38,7 @@ public class PackageResourceHandler extends AbstractAndroidHandler {
                         String fullFilename = changedFile.fullFilename;
                         String from = fullFilename;
                         String relativePath = new File(fullFilename).getAbsolutePath().substring(new File(directory).getAbsolutePath().length() + 1);
-                        String to = prepareOutput + Constant.Symbol.SLASH_LEFT + relativePath;
+                        String to = prepareOutput + Constants.Symbol.SLASH_LEFT + relativePath;
                         FileUtil.copyFile(from, to, FileUtil.FileCopyType.FILE_TO_FILE);
                     }
                 } else {

@@ -2,7 +2,7 @@ package com.oneliang.tools.builder.android.template;
 
 import java.io.InputStream;
 
-public final class TemplateConstant {
+public final class ConstantsTemplate {
 
 	public static enum Template {
 		BUILD_CONFIG("BuildConfig.template"), ANDROID_MANIFEST("AndroidManifest.template");
@@ -18,6 +18,6 @@ public final class TemplateConstant {
 	}
 
 	public static InputStream getTemplateInputStream(Template template) {
-		return TemplateConstant.class.getResourceAsStream(template.getTemplateFilename());
+		return ConstantsTemplate.class.getResourceAsStream(template.getTemplateFilename());
 	}
 }
